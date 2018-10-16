@@ -7,7 +7,31 @@
   $tipo = filter_input(INPUT_POST,"tipoRelatorio");
   $dataInicial = filter_input(INPUT_POST,"start");
   $dataFinal = filter_input(INPUT_POST,"end");
+  
+  function converteData($data)
+  {
 
+    list($dia,$mes,$ano) = explode('/',$data);
+
+
+    switch($mes)
+    {
+      case '01': $mes = 'JAN';break;
+      case '02': $mes = 'FEB';break;
+      case '03': $mes = 'MAR';break;
+      case '04': $mes = 'APR';break;
+      case '05': $mes = 'MAY';break;
+      case '06': $mes = 'JUN';break;
+      case '07': $mes = 'JUL';break;
+      case '08': $mes = 'AUG';break;
+      case '09': $mes = 'SEP';break;
+      case '10': $mes = 'OCT';break;
+      case '11': $mes = 'NOV';break;
+      case '12': $mes = 'DEC';break;
+    }
+    return "$dia/$mes/$ano";
+  }
+  
 ?>
 
 <body>
@@ -16,7 +40,7 @@
     
     <div class=row>
       <div class='col-md-12'>
-        <?php echo "<center><h1>Comissão da $equipe entre $dataInicial - $dataFinal </h1></center>";?>
+        <?php echo "<center><h1>Comissão de $tipo da $equipe entre $dataInicial - $dataFinal </h1></center>";?>
       </div>
     </div>
     
@@ -38,14 +62,17 @@
         
         <tbody>
           <?php 
-            if($tipo == "Assistencia")
+            $dataInicial = converteData($dataInicial);
+            $dataFinal = converteData($dataFinal);
+
+            if($tipo == "assistencia")
             {
               $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA
                           FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c WHERE b.nome = '$equipe'
                           AND a.codequ = b.codequ AND a.codsere is not null  AND 
                           a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codser LIKE '3%' 
                           ORDER BY a.dtexec ASC");
-            }elseif($tipo == "Instalação"){
+            }elseif($tipo == "instalacao"){
               $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA
                           FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c WHERE b.nome = '$equipe'
                           AND a.codequ = b.codequ AND a.codsere is not null  AND 
@@ -58,8 +85,10 @@
                           a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser
                           ORDER BY a.dtexec ASC");
             }
-
-            oci_execute($sql_comissao);
+           $ok = oci_execute($sql_comissao);
+          print_r(oci_error($sql_comissao));
+//            var_dump($sql_comissao);
+          
             $soma = 0.00;
             $quantidade_OS = 0;
             while ($resultado = oci_fetch_array($sql_comissao, OCI_BOTH))
