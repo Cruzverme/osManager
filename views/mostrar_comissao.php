@@ -41,21 +41,21 @@
             if($tipo == "Assistencia")
             {
               $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA
-                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c WHERE b.nome = '$empresas'
+                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c WHERE b.nome = '$equipe'
                           AND a.codequ = b.codequ AND a.codsere is not null  AND 
-                          a.DTEXEC BETWEEN '$data_i' and '$data_f'  AND a.codser = c.codser AND c.codser LIKE '3%' 
+                          a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codser LIKE '3%' 
                           ORDER BY a.dtexec ASC");
             }elseif($tipo == "Instalação"){
               $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA
-                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c WHERE b.nome = '$empresas'
+                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c WHERE b.nome = '$equipe'
                           AND a.codequ = b.codequ AND a.codsere is not null  AND 
-                          a.DTEXEC BETWEEN '$data_i' and '$data_f'  AND a.codser = c.codser AND c.codser NOT LIKE '3%' 
+                          a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codser NOT LIKE '3%' 
                           ORDER BY a.dtexec ASC");
             }else{
               $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA
-                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c WHERE b.nome = '$empresas'
+                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c WHERE b.nome = '$equipe'
                           AND a.codequ = b.codequ AND a.codsere is not null  AND 
-                          a.DTEXEC BETWEEN '$data_i' and '$data_f'  AND a.codser = c.codser
+                          a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser
                           ORDER BY a.dtexec ASC");
             }
 
