@@ -59,10 +59,10 @@
                           ORDER BY a.dtexec ASC");
             }
 
-            oci_execute($sql_empresas);
+            oci_execute($sql_comissao);
             $soma = 0.00;
             $quantidade_OS = 0;
-            while ($resultado = oci_fetch_array($sql_empresas, OCI_BOTH))
+            while ($resultado = oci_fetch_array($sql_comissao, OCI_BOTH))
             {
               if($tipo != "Assistência" and $resultado[9] == null )
               {

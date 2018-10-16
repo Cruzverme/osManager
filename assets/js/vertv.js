@@ -28,7 +28,7 @@ $(document).ready(function() {
 
 $('.input-daterange').each(function() {
 	var options={
-		format: 'dd/M/yyyy',
+		format: 'dd/mm/yyyy',
 		orientation: 'top left',
 		todayHighlight: true,
 		clearDates: 'clearDates',
