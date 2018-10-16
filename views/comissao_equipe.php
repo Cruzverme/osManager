@@ -10,7 +10,13 @@
   <?php include "../classes/nav.php";?>
   
     <div id="main" class="container-fluid">
-      <h3 class="page-header">Comissão de Equipes</h3>
+      <div  class="row">
+        <h3 class="page-header">Comissão de Equipes</h3>
+      
+        <div class="col-md-12">
+          <a href="gerenciarComissao.php" class="btn btn-primary pull-right h2">Ajustar Comissão</a>
+        </div>
+      </div>
 
       <form action="mostrar_comissao.php" method="post" target="_blank">
       <!-- area de campos do form -->
@@ -26,7 +32,7 @@
                 }
               ?>
             </select>
-          </div>
+          </div>    
 
           <div class="form-group col-md-6">
             <label for="campo2">Selecione o Tipo de Relatorio</label>
