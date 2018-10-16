@@ -10,7 +10,6 @@
     
     if($usuario && $senha)
     {
-      echo "eae $usuario";
       $sql_verifica_login = ("SELECT id, usuario, nome,nivel_usuario FROM system_user WHERE usuario = '$usuario' " );
       $sql_verifica_password = ("SELECT usuario,password FROM system_user WHERE usuario = '$usuario' AND password = '$senha'" );
 
