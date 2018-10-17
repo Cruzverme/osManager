@@ -23,6 +23,7 @@ $(document).ready(function() {
 								lengthMenu: 'Mostrando _MENU_ itens',
 								info: 'Exibindo do item _START_ até _END_ de um total _TOTAL_ resultados',
 								infoFiltered: '(Filtrado de _MAX_ resultados)',
+								infoEmpty: 'Exibindo do item 0 até 0 de um total 0 resultados' ,
 								paginate:{
 									first: 'Primeiro',
 									last: 'Ultima',
