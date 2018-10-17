@@ -15,7 +15,9 @@ jQuery(document).ready(function(){
 });
 
 $(document).ready(function() {
-	var tabela = $('#tabelaOS').DataTable();
+	var tabela = $('#tabelaOS').DataTable({
+		'order': [[12,'asc'],[10,'asc']]
+	});
 	//table.column(1).search('Developer').draw()
   //Event Listener for custom radio buttons to filter datatable
 	$('.customRadioButton').change(function () 
