@@ -75,9 +75,9 @@
               <input type="text" name="os" id="campoOrdemServicoData" placeholder="Insira a Ordem de Serviço" class="form-control">
             </div>
 
-            <div class="col-md-6 form-group date">  
+            <div class="col-md-6 form-group date">
               <label for="dataCalendario" > Selecione o dia correto da Execução</label>
-              <input type="text" class="form-control" id="dataCalendario" name="data" />
+              <input type="text" class="form-control" id="dataCalendario" name="data"/>
             </div>
 
           </div>
