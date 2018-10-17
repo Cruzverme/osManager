@@ -26,6 +26,19 @@ $(document).ready(function() {
 	});
 });
 
+$(document).ready(function(){
+	var data = $('#dataCalendario');
+	var options={
+		format: 'dd/mm/yyyy',
+		orientation: 'top left',
+		todayHighlight: true,
+		clearDates: 'clearDates',
+		autoclose: true,
+		clearBtn: true
+	};
+	data.datepicker(options);
+});
+
 $('.input-daterange').each(function() {
 	var options={
 		format: 'dd/mm/yyyy',
