@@ -1,5 +1,6 @@
 <?php 
   include "../config/db.php";
+  session_start();
   include "../classes/header.php";
 ?>
 
@@ -7,45 +8,60 @@
   <?php 
   
     include "../classes/nav.php";
-    
-    $sql_nome = ("SELECT nome,id FROM users");
-    $ordens = mysqli_query($conectar,$sql_nome);
+
+    #capturar mensagem
+    if(isset($_SESSION['menssagem']) && !empty($_SESSION['menssagem']))
+    {
+        print "<script>bootbox.alert({
+                                        message:\"{$_SESSION['menssagem']}\",
+                                        size:'small',
+                                        backdrop: true
+                                      })</script>";
+        unset( $_SESSION['menssagem'] );
+    }
+
+    $sql_equipes = "SELECT nome FROM equipes";
+    $executa_equipes = mysqli_query($conectar,$sql_equipes);
   ?>
 
   <div id="main" class="container-fluid">
     <h3 class="page-header">Designar Ordem de Serviço</h3>
   </div>
 
-  <form action="index.html">
+  <form action="../classes/salvarTecnico.php" method="post">
   <div class="row">
-    
+    <div class="col-md-2"></div>
+
     <div class="form-group col-md-4">
       <label for="campo1">Nome Do Técnico</label>
-      <input type="text" class="form-control" placeholder="Digite o nome do técnico" id="campo1">
+      <input type="text" name="nomeTec" class="form-control" placeholder="Digite o nome do técnico" id="campo1">
     </div>
     
     <div class="form-group col-md-4">
       <label for="campo2">Usuário</label>
-      <input type="text" class="form-control" placeholder="Digite o usuario de acesso ao aplicativo" id="campo3">
+      <input type="text" name="user" class="form-control"  placeholder="Digite o usuario de acesso ao aplicativo" id="campo3">
     </div>
-    
-    <div class="form-group col-md-4">
-      <label for="campo3">Senha</label>
-      <input type="password" class="form-control" placeholder="Digite a senha" id="campo3">
-    </div>
-
   </div>
   
   <div class="row">
+    <div class="col-md-2"></div>
+    
     <div class="form-group col-md-4">
-      <label for=campos4>Selecione a Equipe</label>
-      <select class="form-control" name="carlist" form="carform" id=campo4>
-        <option value="volvo">Volvo</option>
-        <option value="saab">Saab</option>
-        <option value="opel">Opel</option>
-        <option value="audi">Audi</option>
-      </select>
+      <label for="campo3">Senha</label>
+      <input type="password" class="form-control" name=senha placeholder="Digite a senha" id="campo3">
     </div>
+
+    <div class="form-group col-md-4">
+      <label for="campo1">Selecione a Equipe</label>
+      <select name=equipe id="campo1" class='form-control'>
+        <?php
+          while($row = mysqli_fetch_array($executa_equipes))
+          {
+            echo "<option value='$row[nome]'>$row[nome]</option>";
+          }
+        ?>
+      </select>
+    </div>    
   </div>
   
   <hr />
@@ -53,7 +69,7 @@
   <div id="actions" class="row">
     <div class="col-md-12">
       <button type="submit" class="btn btn-primary">Salvar</button>
-      <a href="#" class="btn btn-default">Cancelar</a>
+      <a href="tecnico_gerencia.php" class="btn btn-default">Cancelar</a>
     </div>
   </div>
   </form>

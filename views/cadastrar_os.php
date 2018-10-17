@@ -30,7 +30,8 @@
 
   <form action="../classes/designador.php" method="post" enctype="multipart/form-data" novalidate="novalidate" accept-charset="UTF-8">
     <div class="row">
-      <div class="form-group col-md-4">
+    <div class="form-group col-md-12">
+      <div class="form-group col-md-6">
         <label for="campo2">Técnico</label>
         <select name='tecnico' class="form-control" id=campo2>
         <?php
@@ -46,15 +47,13 @@
           }
         ?>
         </select>
-
-        <div class="form-group col-md-4">
+        </div>
+        <div class="form-group col-md-1">
           <label for="campo1">Numero de OS</label>
           <textarea class="form-control" rows="5" name='os_diaria' id="campo1"></textarea>
         </div>
-      </div>
-      
+      </div>  
     </div>
-    
     
     <div id="actions" class="row">
       <div class="col-md-12">
