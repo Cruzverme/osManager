@@ -38,21 +38,30 @@
                     <td>$row[equipe]</td>
                     <td>$row[usuario]</td>
                     <td>
-                      <button class='btn btn-default'>
+                      <button name='alterarSenha' class='btn btn-default' onClick=alterarSenha($row[id]) >
                         <span class='glyphicon glyphicon-cog' aria-hidden='true'></span>
                       </button>
-                      <button class='btn btn-default'>
+                      <button name='deletar' class='btn btn-default' onClick=removerUsuario($row[id])>
                         <span class='glyphicon glyphicon-trash' aria-hidden='true'></span>
                       </button>
                     </td>
                   </tr>";
-          }  
+          }
         ?>
       </tbody>
     </table>
   </div>
   <div class="col-md-3"></div>
-  
 </body>
+
+<!-- MODAL -->
+    <div class="form-content" style="display:none;">
+      <form class="form" role="form">
+        <div class="form-group">
+          <label for="password">Digite a Nova Senha</label>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+        </div>
+      </form>  
+    </div>
 
 <?php include "../classes/footer.php";?>

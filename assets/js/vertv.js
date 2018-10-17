@@ -68,3 +68,82 @@ $('.input-daterange').each(function() {
 	$(this).datepicker(options);
 });
 
+function removerUsuario(id_usuario)
+{
+	var userID = id_usuario;
+	bootbox.confirm({
+		message: "Deseja Mesmo Excluir?",
+		buttons: {
+			confirm: {
+					label: 'Sim',
+					className: 'btn btn-success'
+			},
+			cancel: {
+					label: 'Não',
+					className: 'btn btn-danger'
+			}
+		},
+		callback: function (result) {
+			if(result)
+				$.post("../classes/deletarTecnico.php",{id_usuario: userID},function(msg_retorno){
+					bootbox.alert({
+						title: "Remoção de Técnico",
+						message: msg_retorno,
+						callback: function()
+						{
+							location.reload(true);
+						}
+					});
+				});
+			else{
+				bootbox.alert({
+					title: "Remoção de Técnico",
+					message: "Operação Cancelada!",
+				});
+			}
+		}
+	});
+}
+
+function alterarSenha(id_usuario)
+{
+	var userID = id_usuario;
+	var modal = bootbox.dialog({
+		message: $(".form-content").html(),
+		title: "Alterar Senha",
+		buttons:[
+			{
+				label: "Alterar",
+				className: "btn btn-primary pull-left",
+				callback: function()
+				{
+					var form = modal.find(".form");
+					var items = form.serialize();
+					
+					$.post("../classes/alterarSenha.php",{novaSenha: items, id_usuario: userID},function(msg_retorno){
+					 bootbox.alert({
+					 	title: "Alteração de Senha",
+					  		message: msg_retorno,
+					  		callback: function()
+					  		{
+					  			console.log(msg_retorno);
+					  		}
+					  	});
+					});
+				}
+			},
+			{
+				label: "Close",
+				className: "btn btn-default pull-left",
+				callback: function() {
+					console.log("Fechado");
+				}
+			}
+		],
+		show: false,
+		onEscape: function() {
+			modal.modal("hide")
+		}
+	});
+	modal.modal("show");
+}
