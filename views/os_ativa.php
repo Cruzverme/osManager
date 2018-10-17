@@ -4,7 +4,6 @@
   
   ?>
 
-  
   <body>
     <?php  
       #capturar mensagem
@@ -28,11 +27,10 @@
         </div>
     
         <div class="col-md-6">
-          <div class="input-group h2">
-            <input name="data[search]" class="form-control" id="search" type="text" placeholder="Pesquisar Itens">
+          <div class="  form-group input-group h2">
             <span class="input-group-btn">
-              <button class="btn btn-primary" type="submit">
-                <span class="glyphicon glyphicon-search"></span>
+              <button class="btn btn-primary form-control" onClick="javascript:location.reload(true);">
+                <span class="">ATUALIZAR PAGINA</span>
               </button>
             </span>
           </div>
@@ -49,7 +47,7 @@
         <div class="form-group">
             <label class="control-label">Filtrar Por:</label>
             <div class="radio">
-                <input class="customRadioButton" id="all" name="searchRadio" value="" checked="" type="radio">
+                <input class="customRadioButton" id="all" name="searchRadio" value="" checked="true" type="radio">
                 <label for="all">Tudo</label>
             </div>
             <div class="radio">

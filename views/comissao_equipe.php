@@ -42,15 +42,19 @@
             </select>
           </div>
         </div>
-          
-        <div class="form-group input-group input-daterange">
-          
-          <input type="text" class="input-sm form-control" name="start" />
-          <span class="input-group-addon">Até</span>
-          <input type="text" class="input-sm form-control" name="end" />
-          
-        </div>
         
+        <div class='form-group col-md-12'>  
+          <center>
+            <label for="periodo"><h4>Selecione o Periodo</h4></label>
+          </center>
+          
+          <div class="form-group input-group input-daterange">  
+            <input type="text" id="periodo" class="input-sm form-control" name="start" />
+            <span class="input-group-addon">Até</span>
+            <input type="text" class="input-sm form-control" name="end" />    
+          </div>
+        </div>
+
         <div id="actions" class="row">
           <div class="col-md-12">
             <button type="submit" class="btn btn-primary">Mostrar Comissão</button>
