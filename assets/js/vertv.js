@@ -68,7 +68,9 @@ $('.input-daterange').each(function() {
 	$(this).datepicker(options);
 });
 
-function removerUsuario(id_usuario)
+// ########## TECNICOS #################
+
+function removerTecnico(id_usuario)
 {
 	var userID = id_usuario;
 	bootbox.confirm({
@@ -133,7 +135,7 @@ function alterarSenha(id_usuario)
 				}
 			},
 			{
-				label: "Close",
+				label: "Fechar",
 				className: "btn btn-default pull-left",
 				callback: function() {
 					console.log("Fechado");
@@ -147,6 +149,8 @@ function alterarSenha(id_usuario)
 	});
 	modal.modal("show");
 }
+
+// ########## OS #################
 
 function alterarSituacaoOrdem(ordem,contrato,tecnico,tipo)
 {
@@ -189,4 +193,85 @@ function alterarSituacaoOrdem(ordem,contrato,tecnico,tipo)
 			}
 		}
 	});
+}
+
+// ########## USUARIO #################
+
+function removerUsuario(id_usuario)
+{
+	var userID = id_usuario;
+	bootbox.confirm({
+		message: "Deseja Mesmo Excluir?",
+		buttons: {
+			confirm: {
+					label: 'Sim',
+					className: 'btn btn-success'
+			},
+			cancel: {
+					label: 'Não',
+					className: 'btn btn-danger'
+			}
+		},
+		callback: function (result) {
+			if(result)
+				$.post("../classesUsuario/deletarUsuario.php",{id_usuario: userID},function(msg_retorno){
+					bootbox.alert({
+						title: "Remoção de Usuário",
+						message: msg_retorno,
+						callback: function()
+						{
+							location.reload(true);
+						}
+					});
+				});
+			else{
+				bootbox.alert({
+					title: "Remoção de Usuário",
+					message: "Operação Cancelada!",
+				});
+			}
+		}
+	});
+}
+
+function alterarSenhaUsuario(id_usuario)
+{
+	var userID = id_usuario;
+	var modal = bootbox.dialog({
+		message: $(".form-content").html(),
+		title: "Alterar Senha",
+		buttons:[
+			{
+				label: "Alterar",
+				className: "btn btn-primary pull-left",
+				callback: function()
+				{
+					var form = modal.find(".form");
+					var items = form.serialize();
+					$.post("../classesUsuario/alterarSenhaUsuario.php",{parametros: items, id_usuario: userID},function(msg_retorno){
+					 bootbox.alert({
+					 	title: "Alteração de Usuário",
+					  		message: msg_retorno,
+					  		callback: function()
+					  		{
+					  			location.reload(true);
+					  		}
+					  	});
+					});
+				}
+			},
+			{
+				label: "Fechar",
+				className: "btn btn-default pull-left",
+				callback: function() {
+					console.log("Fechado");
+				}
+			}
+		],
+		show: false,
+		onEscape: function() {
+			modal.modal("hide")
+		}
+	});
+	modal.modal("show");
 }

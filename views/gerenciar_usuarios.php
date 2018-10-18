@@ -1,9 +1,9 @@
-  <?php 
+<?php 
   include "../config/db.php";
   
   include "../classes/header.php";
   
-  $sql_usuario = "select * from users";
+  $sql_usuario = "select * from system_user";
   $executa = mysqli_query($conectar,$sql_usuario);
 
 ?>
@@ -12,14 +12,10 @@
 
 
   <div id="main" class="container-fluid">
-    <div class="page-header">
-    <h3>Cadastro de Técnico</h3>
-      <h5>Esta sessão cadastra usuários para acessar o aplicativo</h5>
-    </div>
-    
+    <h3 class="page-header">Cadastro de Usuário</h3>
 
     <div class="col-md-12">
-      <a href="cadastrar_tecnico.php" class="btn btn-primary pull-right h2">Cadastrar Técnico</a>
+      <a href="cadastrar_usuario.php" class="btn btn-primary pull-right h2">Cadastrar Usuário</a>
     </div>
   </div>
   <div class="col-md-3"></div>
@@ -28,8 +24,9 @@
       <thead>
         <tr>
           <th>Nome</th>
-          <th>Equipe</th>
           <th>Usuario</th>
+          <th>Ultimo Login</th>
+          <th>Tipo de Usuário</th>
           <th class="actions">Ações</th>
         </tr>
       </thead>
@@ -39,13 +36,18 @@
           {
             echo "<tr>
                     <td>$row[nome]</td>
-                    <td>$row[equipe]</td>
                     <td>$row[usuario]</td>
+                    <td>$row[data_login]</td>";
+                    if($row['nivel_usuario'] == 99)
+                      echo "<td>Administrador</td>";
+                    else
+                      echo "<td>Usuário</td>";
+            echo"
                     <td>
-                      <button name='alterarSenha' class='btn btn-default' onClick=alterarSenha($row[id]) >
+                      <button name='alterarSenha' class='btn btn-default' onClick=alterarSenhaUsuario($row[id]) >
                         <span class='glyphicon glyphicon-cog' aria-hidden='true'></span>
                       </button>
-                      <button name='deletar' class='btn btn-default' onClick=removerTecnico($row[id])>
+                      <button name='deletar' class='btn btn-default' onClick=removerUsuario($row[id])>
                         <span class='glyphicon glyphicon-trash' aria-hidden='true'></span>
                       </button>
                     </td>
@@ -61,6 +63,13 @@
 <!-- MODAL -->
     <div class="form-content" style="display:none;">
       <form class="form" role="form">
+        <div class="form-group">
+          <label for="permissao">Alterar Tipo de Usuário</label>
+          <select class="form-control" name=permissao>
+            <option value=0>Usuário</option>
+            <option value=99>Administrador</option>
+          </select>
+        </div>
         <div class="form-group">
           <label for="password">Digite a Nova Senha</label>
           <input type="password" class="form-control" id="password" name="password" placeholder="Password">

@@ -7,12 +7,12 @@
 
   if($id_usuario)
   {
-    $sql_deletarTecnico = "DELETE FROM users WHERE id = $id_usuario";
-    $executa_alteracao = mysqli_query($conectar,$sql_deletarTecnico);
+    $sql_deletarUsuario = "DELETE FROM system_user WHERE id = $id_usuario";
+    $executa_alteracao = mysqli_query($conectar,$sql_deletarUsuario);
 
     if(mysqli_affected_rows($conectar) > 0)
     {
-      echo "Técnico Removido!";
+      echo "Usuário Removido!";
     }else{
       echo "Ocorreu um erro na remoção";
     }

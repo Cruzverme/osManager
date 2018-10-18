@@ -20,7 +20,7 @@ echo "
         <li><a href=terceirizados.php>Cadastro de Equipe</a></li>
         <li><a href=comissao_equipe.php>Comissão de Equipes</a></li>";
         if($permissao == 99)
-          echo "<li><a href=alterar_perfil.php>Gerenciar Usuários</a></li>";
+          echo "<li><a href=gerenciar_usuarios.php>Gerenciar Usuários</a></li>";
 echo"
         <li><a href=../classesUsuario/logout.php>Sair</a></li>
       </ul>
