@@ -67,21 +67,21 @@
 
             if($tipo == "assistencia")
             {
-              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA
-                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c WHERE b.nome = '$equipe'
-                          AND a.codequ = b.codequ AND a.codsere is not null  AND 
+              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
+                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
+                          b.nome = '$equipe' AND a.codequ = b.codequ AND a.codsere is not null  AND 
                           a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codser LIKE '3%' 
                           ORDER BY a.dtexec ASC");
             }elseif($tipo == "instalacao"){
-              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA
-                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c WHERE b.nome = '$equipe'
-                          AND a.codequ = b.codequ AND a.codsere is not null  AND 
+              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
+                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
+                          b.nome = '$equipe' AND a.codequ = b.codequ AND a.codsere is not null  AND 
                           a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codser NOT LIKE '3%' 
                           ORDER BY a.dtexec ASC");
             }else{
-              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA
-                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c WHERE b.nome = '$equipe'
-                          AND a.codequ = b.codequ AND a.codsere is not null  AND 
+              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
+                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
+                          b.nome = '$equipe' AND a.codequ = b.codequ AND a.codsere is not null  AND 
                           a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser
                           ORDER BY a.dtexec ASC");
             }
