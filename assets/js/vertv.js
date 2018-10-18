@@ -147,3 +147,46 @@ function alterarSenha(id_usuario)
 	});
 	modal.modal("show");
 }
+
+function alterarSituacaoOrdem(ordem,contrato,tecnico,tipo)
+{
+	var ordemServico = ordem;
+	var contrato = contrato;
+	
+	console.log(tipo);
+	bootbox.confirm({
+		message: "Deseja Mesmo " + tipo + "?",
+		buttons: {
+			confirm: {
+					label: 'Sim',
+					className: 'btn btn-success'
+			},
+			cancel: {
+					label: 'Não',
+					className: 'btn btn-danger'
+			}
+		},
+		callback: function (result) 
+		{
+			if(result)
+			{
+				$.post("../classes/alterarSituacao.php",{os: ordemServico,contrato: contrato, tec: tecnico, tipoSituacao: tipo},function(msg_retorno)
+				{
+					bootbox.alert({
+						title: "Situação de OS",
+						message: msg_retorno,
+						callback: function()
+						{
+							location.reload(true);
+						}
+					});
+				});
+			}else{
+				bootbox.alert({
+					title: "Situação de OS",
+					message: "Operação Cancelada!",
+				});
+			}
+		}
+	});
+}

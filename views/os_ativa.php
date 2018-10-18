@@ -112,10 +112,27 @@
                   <td>$row[observacao]</td>
                   <td>$row[anotacaoTecnico]</td>
                   <td>$row[servicoExecutado]</td>
-                  <td>$row[diaExecutado]</td>
+                  <td>$row[diaExecutado]</td>";
+                  
+                  if($row['status'] == 0)
+                    $situacao = "";
+                  else
+                    $situacao = "disabled";
+                  
+                  echo"
                   <td class='actions'>
-                    <a class='btn btn-danger btn-xs' href='#'>Excluir</a>
-                    <a class='btn btn-success btn-xs' href='#'>Concluir</a>
+                    <a class='btn btn-success btn-xs' $situacao onClick=alterarSituacaoOrdem($row[ordemServico],$row[contrato],'$row[tecnico]','Concluir')>
+                      <span class='glyphicon glyphicon-ok' aria-hidden='true'>
+                      </span>
+                    </a>
+                    <!--<a class='btn btn-warning btn-xs' href='#' $situacao>
+                      <span class='glyphicon glyphicon-minus' aria-hidden='true'>
+                      </span>
+                    </a>-->
+                    <a class='btn btn-danger btn-xs' $situacao onClick=alterarSituacaoOrdem($row[ordemServico],$row[contrato],'$row[tecnico]','Cancelar') >
+                      <span class='glyphicon glyphicon-remove' aria-hidden='true'>
+                      </span>
+                    </a>
                   </td>";
 
                   if($row['status'] == 0)
