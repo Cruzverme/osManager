@@ -1,5 +1,6 @@
 <?php 
-
+  // Verificador de sessão 
+  include "../classes/verifica_sessao.php";
 echo "
   <!DOCTYPE html>
   <html lang=pt-br>

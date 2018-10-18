@@ -1,6 +1,6 @@
   <?php 
   include "../config/db.php";
-  session_start();
+  
   include "../classes/header.php";
   
   $sql_usuario = "select * from users";

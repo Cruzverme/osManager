@@ -1,6 +1,6 @@
 <?php 
   include "../config/db.php";
-  session_start();
+  
   include "../classes/header.php";
   include "../config/db_oracle.php";
   

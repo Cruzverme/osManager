@@ -67,9 +67,6 @@
     </div>
     
     <?php session_destroy(); ?>
-    <!-- <script src="assets/bootstrap3/js/jquery.js"></script>
-    <script src="assets/bootstrap3/js/bootstrap.min.js"></script>
-    <script src="assets/js/bootbox.min.js"></script> -->
     <script src="assets/js/vertv.js"></script>
 
   </body>
