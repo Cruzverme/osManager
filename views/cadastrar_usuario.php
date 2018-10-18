@@ -30,12 +30,12 @@
 
       <div class="form-group col-md-4">
         <label for="campo1">Nome Usuário</label>
-        <input type="text" name="nomeUsuario" class="form-control" placeholder="Digite o nome do técnico" id="campo1">
+        <input type="text" name="nomeUsuario" class="form-control" placeholder="Digite o nome do Usuário" id="campo1">
       </div>
       
       <div class="form-group col-md-4">
         <label for="campo2">Usuário</label>
-        <input type="text" name="user" class="form-control"  placeholder="Digite o usuario de acesso ao aplicativo" id="campo3">
+        <input type="text" name="user" class="form-control"  placeholder="Digite o usuario" id="campo3">
       </div>
     </div>
     
