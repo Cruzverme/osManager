@@ -32,10 +32,17 @@
         // TUDO OK! Agora, passa os dados para a sessão e redireciona o usuário
         $_SESSION["id_usuario"]= $dados["id"];
         $_SESSION["nome_usuario"] = $dados["nome"];
+        $_SESSION["nivel"] = $dados["nivel_usuario"];
+        
+        $date = new DateTime("NOW", new DateTimeZone('America/Sao_Paulo')); //ajusta hora de login
 
         $nome = $_SESSION['nome_usuario'];
         $usuario_id = $_SESSION["id_usuario"];
+        $permissao = $_SESSION["nivel"];
         
+        $sql = "UPDATE system_user SET data_login = '{$date->format('Y-m-d H:i:s')}' WHERE id = $usuario_id";
+        mysqli_query($conectar,$sql);
+
         header('Location: ../views/os_ativa.php');
         mysqli_close($conectar);
         exit;

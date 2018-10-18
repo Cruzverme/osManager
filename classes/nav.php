@@ -18,8 +18,11 @@ echo "
         <li><a href=cadastrar_os.php>Designar Ordem de Serviço</a></li>
         <li><a href=tecnico_gerencia.php>Gerenciar Técnico</a></li>
         <li><a href=terceirizados.php>Cadastro de Equipe</a></li>
-        <li><a href=comissao_equipe.php>Comissão de Equipes</a></li>
-        <li><a href=alterar_perfil.php>Perfil</a></li>
+        <li><a href=comissao_equipe.php>Comissão de Equipes</a></li>";
+        if($permissao == 99)
+          echo "<li><a href=alterar_perfil.php>Gerenciar Usuários</a></li>";
+echo"
+        <li><a href=../classesUsuario/logout.php>Sair</a></li>
       </ul>
     </div>
   </div>
