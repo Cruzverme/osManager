@@ -188,8 +188,15 @@
                   else
                     $resultado[6] = 65.86 + ($resultado[8] * 18);
                 }
-                
-                
+                elseif($resultado[7] == 1 AND sizeof($clienteFibra) >=1)
+                {
+                  if($resultado[8] >= 0)
+                  {
+                    $resultado[6] = 80.00 + ($resultado[8] * 20.00);//se for predio
+                  }else{
+                    $resultado[6] = 80.00;
+                  }
+                }
               }//FIM TIPO ASSISTENCIA
               elseif($tipo != "Assistência" and $resultado[9] != null)
               {
