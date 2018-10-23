@@ -2,6 +2,7 @@
   include "../config/db.php";
   include "../classes/header.php";
   include "../config/db_oracle.php";
+  include "../classes/funcoes.php";
 
   $equipe = filter_input(INPUT_POST,"equipe");
   $tipo = filter_input(INPUT_POST,"tipoRelatorio");
@@ -12,7 +13,6 @@
   {
 
     list($dia,$mes,$ano) = explode('/',$data);
-
 
     switch($mes)
     {
@@ -93,7 +93,9 @@
             $quantidade_OS = 0;
             while ($resultado = oci_fetch_array($sql_comissao, OCI_BOTH))
             {
-              if($tipo != "Assistência" and $resultado[9] == null )
+              $clienteFibra = verificaPacote($resultado[5],$dataInicial,$dataFinal,$resultado[3]);
+
+              if($tipo != "Assistência" and $resultado[9] == null ) //SEM APARTAMENTO
               {
                 if(strpos($resultado[0],"CONEXAO PONTO ADICIONAL") !== FALSE)
                 {
@@ -105,19 +107,28 @@
                     {
                       $resultado[7] = 1;
                     }
-                    $resultado[6] = 26.56 + ($resultado[8] * 18.00);
+                    if(sizeOf($clienteFibra) >= 1)
+                      $resultado[6] = 30 + ($resultado[8] * 20);//se for fibra o valor e esse
+                    else
+                      $resultado[6] = 26.56 + ($resultado[8] * 18.00);//se for hfc
                   }elseif($resultado[7] == 1 AND $resultado[8] >=0)
                   {
-                    $resultado[6] = 26.56 + ($resultado[8] * 18.00);
+                    if(sizeOf($clienteFibra) >= 1)
+                      $resultado[6] = 30 + ($resultado[8] * 20);//se for fibra o valor e esse
+                    else
+                      $resultado[6] = 26.56 + ($resultado[8] * 18.00);
                   }elseif($resultado[7] < 1 AND $resultado[8] >=1) //;se for somente para instalar o ponto adicional.
                   {
-                    $resultado[6] = 26.56 + (($resultado[8] - 1) * 18.00);
+                    if(sizeOf($clienteFibra) >= 1)
+                      $resultado[6] = 30 + (($resultado[8] - 1) * 20);//diminui 1 porque 1 ponto tem o valor completo
+                    else
+                      $resultado[6] = 26.56 + (($resultado[8] - 1) * 18.00);
                   }
                 }elseif(strpos($resultado[0],"DESCONEXAO") !== FALSE )
                 {
                     $resultado[6] = 25;
                 }
-                elseif(strpos($resultado[0],"TRANSFERENCIA") != FALSE)
+                elseif(strpos($resultado[0],"TRANSFERENCIA") !== FALSE)
                 {
                   if($resultado[7] > 1 AND $resultado[8] >= 0)
                   {
@@ -128,12 +139,20 @@
                     {
                         $resultado[7] = 1;
                     }
-                    $resultado[6] = 65.86 + ($resultado[8] * 18.00);
+                    if(sizeOf($clienteFibra) >= 1)
+                      $resultado[6] = 80 + ($resultado[8] * 20);
+                    else
+                      $resultado[6] = 65.86 + ($resultado[8] * 18.00);
                   }elseif($resultado[7] == 1 AND $resultado[8] >=0)
-                  {
-                    $resultado[6]= 65.86 + ($resultado[8] * 18.00 );
-                  }elseif(strpos($resultado[0],"RECONEXAO") !== FALSE )
-                  {
+                  { 
+                    if(sizeOf($clienteFibra) >= 1)
+                      $resultado[6] = 80 + ($resultado[8] * 20);
+                    else
+                      $resultado[6]= 65.86 + ($resultado[8] * 18.00 );
+                  }
+                }
+                elseif(strpos($resultado[0],"RECONEXAO") !== FALSE )
+                {
                     if($resultado[7] > 1 AND $resultado[8] >= 0)
                     {
                       $resultado[7] = $resultado[7] - 1;
@@ -142,24 +161,35 @@
                       {
                           $resultado[7] = 1;
                       }
-                      $resultado[6] = 65.86 + ($resultado[8] * 18.00);
+                      if(sizeOf($clienteFibra) >= 1)
+                        $resultado[6] = 80 + ($resultado[8] * 20);
+                      else
+                        $resultado[6] = 65.86 + ($resultado[8] * 18.00);
                     }
                     elseif($resultado[7] == 1 AND $resultado[8] >=0)
                     {
-                      $resultado[6]= 65.86 + ($resultado[8] * 18.00);
-                    }elseif($resultado[7] > 1 AND $resultado[8] >= 0)
-                    {
-                      $resultado[7] = $resultado[7] - 1;
-                      $resultado[8] = $resultado[8] + $resultado[7];
-                      
-                      if($resultado[7] != 1)
-                      {
-                        $resultado[7] = 1;
-                      }
-                      $resultado[6] = 65.86 + ($resultado[8] * 18);
+                      if(sizeOf($clienteFibra) >= 1)
+                        $resultado[6] = 80 + ($resultado[8] * 20);
+                      else
+                        $resultado[6]= 65.86 + ($resultado[8] * 18.00);
                     }
-                  }
                 }
+                elseif($resultado[7] > 1 AND $resultado[8] >= 0)
+                {
+                  $resultado[7] = $resultado[7] - 1;
+                  $resultado[8] = $resultado[8] + $resultado[7];
+                  
+                  if($resultado[7] != 1)
+                  {
+                    $resultado[7] = 1;
+                  }
+                  if(sizeOf($clienteFibra) >= 1)
+                    $resultado[6] = 80 + ($resultado[8] * 20);
+                  else
+                    $resultado[6] = 65.86 + ($resultado[8] * 18);
+                }
+                
+                
               }//FIM TIPO ASSISTENCIA
               elseif($tipo != "Assistência" and $resultado[9] != null)
               {
@@ -173,17 +203,23 @@
                     {
                       $resultado[7] = 1;
                     }
-                    $resultado[6] = 26.56 + ($resultado[8] * 18.00);
+                    if(sizeOf($clienteFibra) >= 1)
+                      $resultado[6] = 30 + ($resultado[8] * 20);
+                    else
+                      $resultado[6] = 26.56 + ($resultado[8] * 18.00);
                   }elseif($resultado[7] == 1 AND $resultado[8] >=0)
                   {
-                    $resultado[6] = 26.56 + ($resultado[8] * 18.00);
+                    if(sizeOf($clienteFibra) >= 1)
+                      $resultado[6] = 30 + ($resultado[8] * 20);
+                    else
+                      $resultado[6] = 26.56 + ($resultado[8] * 18.00);
                   }
                 }
                 elseif(strpos($resultado[0],"DESCONEXAO ") !== FALSE )
                 {
                   $resultado[6] = 25.00;
                 }
-                elseif(strpos($resultado[0],"TRANSFERENCIA") != FALSE)
+                elseif(strpos($resultado[0],"TRANSFERENCIA") !== FALSE)
                 {
                   if($resultado[7] > 1 AND $resultado[8] >= 0)
                   {
@@ -193,11 +229,17 @@
                     {
                         $resultado[7] = 1;
                     }
-                    $resultado[6] = 38.24 + ($resultado[8] * 18.00);
+                    if(sizeOf($clienteFibra) >= 1)
+                      $resultado[6] = 55 + ($resultado[8] * 20);//se for predio
+                    else  
+                      $resultado[6] = 38.24 + ($resultado[8] * 18.00);
                   }
                   elseif($resultado[7] == 1 AND $resultado[8] >=0)
                   {
-                    $resultado[6]= 38.24 + ($resultado[8] * 18.00 );
+                    if(sizeOf($clienteFibra) >= 1)
+                      $resultado[6] = 55 + ($resultado[8] * 20);//se for predio
+                    else
+                      $resultado[6]= 38.24 + ($resultado[8] * 18.00 );
                   }
                 }
                 elseif(strpos($resultado[0],"RECONEXAO") !== FALSE )
@@ -210,11 +252,17 @@
                     {
                         $resultado[7] = 1;
                     }
-                    $resultado[6] = 38.24 + ($resultado[8] * 18.00);
+                    if(sizeOf($clienteFibra) >= 1)
+                      $resultado[6] = 55 + ($resultado[8] * 20);//se for predio
+                    else
+                      $resultado[6] = 38.24 + ($resultado[8] * 18.00);
                   }
                   elseif($resultado[7] == 1 AND $resultado[8] >=0)
                   {
-                    $resultado[6]= 38.24 + ($resultado[8] * 18.00);
+                    if(sizeOf($clienteFibra) >= 1)
+                      $resultado[6] = 55 + ($resultado[8] * 20);//se for predio
+                    else
+                      $resultado[6]= 38.24 + ($resultado[8] * 18.00);
                   }
                 }
                 elseif($resultado[7] > 1 AND $resultado[8] >= 0)
@@ -225,7 +273,10 @@
                   {
                     $resultado[7] = 1;
                   }
-                  $resultado[6] =  38.24 + ($resultado[8] * 18.00);
+                  if(sizeOf($clienteFibra) >= 1)
+                    $resultado[6] = 55 + ($resultado[8] * 20);//se for predio
+                  else
+                    $resultado[6] =  38.24 + ($resultado[8] * 18.00);
                 }
               }//FIM DE OUTROS SEM SER ASSISTENCIA (INSTALACAO)
               echo "<tr>
