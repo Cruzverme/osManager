@@ -278,6 +278,15 @@
                   else
                     $resultado[6] =  38.24 + ($resultado[8] * 18.00);
                 }
+                elseif($resultado[7] == 1 AND sizeof($clienteFibra) >=1)
+                {
+                  if($resultado[8] >= 0)
+                  {
+                    $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
+                  }else{
+                    $resultado[6] = 55.00;
+                  }
+                }
               }//FIM DE OUTROS SEM SER ASSISTENCIA (INSTALACAO)
               echo "<tr>
                       <th>$resultado[0]</th>
