@@ -275,3 +275,45 @@ function alterarSenhaUsuario(id_usuario)
 	});
 	modal.modal("show");
 }
+
+function ajustarValorComissao(ordemServico)
+{
+  var ordem = ordemServico;
+  var modal = bootbox.dialog({
+    message: $(".form-content").html(),
+    title: "Ajustar Valor da Ordem ",
+    buttons:[
+      {
+        label: "Ajustar",
+        className: "btn btn-primary pull-left",
+        callback: function()
+        {
+          var form = modal.find(".form");
+          var items = form.serialize();
+          $.post("../classes/ajustarValorComissao.php",{valor_comissao: items, os: ordem},function(msg_retorno){
+              bootbox.alert({
+                title: "Ajuste de Comissão",
+                message: msg_retorno,
+                callback: function()
+                {
+                  location.reload(true);
+                }
+              });
+          });
+        }
+      },
+      {
+        label: "Fechar",
+        className: "btn btn-default pull-left",
+        callback: function() {
+          console.log("Fechado");
+        }
+      }
+    ],
+    show: false,
+    onEscape: function() {
+      modal.modal("hide")
+    }
+  });
+  modal.modal("show");
+}

@@ -57,6 +57,7 @@
             <th>PP</th>
             <th>ADICIO</th>
             <th>APTO</th>
+            <th class='action'>Ações</th>
           </tr>
         </thead>
         
@@ -86,8 +87,6 @@
                           ORDER BY a.dtexec ASC");
             }
            $ok = oci_execute($sql_comissao);
-          print_r(oci_error($sql_comissao));
-//            var_dump($sql_comissao);
           
             $soma = 0.00;
             $quantidade_OS = 0;
@@ -305,6 +304,11 @@
                       <th>$resultado[7]</th>
                       <th>$resultado[8]</th>
                       <th>$resultado[9]</th>
+                      <td>
+                          <button class='btn btn-default' onClick = ajustarValorComissao($resultado[4])>
+                            <span class='glyphicon glyphicon-cog'></span>
+                          </button>
+                      </td>
                     </tr>";
 
                     $quantidade_OS+=1;
@@ -318,8 +322,18 @@
         </tbody>
       </table>
     </div>
-  
+   
   </div>
 </body>
+
+<!-- MODAL -->
+    <div class="form-content" style="display:none;">
+      <form class="form" role="form">
+        <div class="form-group">
+          <label for="campoValorComissao">Valor da Comissão</label>
+          <input type="number" min="0.00" step=any id="campoValorComissao" name="valor_comissao" placeholder="Insira a comissão" class="form-control">
+        </div>
+      </form>  
+    </div>
 
 <?php include "../classes/footer.php";?>
