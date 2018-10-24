@@ -32,8 +32,11 @@
           <label for="campoNome">Nome da Equipe</label>
           <input type="text" id="campoNome" name="nomeEquipe" class="form-control" placeholder="Insira o nome da equipe" />
           <br>
-          <div class="form-group col-md-12">
+          <div class="form-group col-md-10">
             <input type="submit" class="form-control btn btn-primary" value="Inserir"/>
+          </div>
+          <div class="form-group col-md-2">
+            <a href="gerenciar_equipes.php" class="btn btn-default">Cancelar</a>
           </div>
 
         </div>

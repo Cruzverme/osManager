@@ -276,6 +276,7 @@ function alterarSenhaUsuario(id_usuario)
 	modal.modal("show");
 }
 
+//## AJUSTE DE COMISSAO ###
 function ajustarValorComissao(ordemServico)
 {
   var ordem = ordemServico;
@@ -316,4 +317,88 @@ function ajustarValorComissao(ordemServico)
     }
   });
   modal.modal("show");
+}
+
+
+//#### EQUIPE TECNICA####
+
+function removerEquipe(id_equipe)
+{
+	var equipeID = id_equipe;
+	bootbox.confirm({
+		message: "Deseja Mesmo Excluir?",
+		buttons: {
+			confirm: {
+					label: 'Sim',
+					className: 'btn btn-success'
+			},
+			cancel: {
+					label: 'Não',
+					className: 'btn btn-danger'
+			}
+		},
+		callback: function (result) {
+			if(result)
+				$.post("../classes/deletarEquipe.php",{id_equipe: equipeID},function(msg_retorno){
+					bootbox.alert({
+						title: "Remoção de Equipe",
+						message: msg_retorno,
+						callback: function()
+						{
+							location.reload(true);
+						}
+					});
+				});
+			else{
+				bootbox.alert({
+					title: "Remoção de Equipe",
+					message: "Operação Cancelada!",
+				});
+			}
+		}
+	});
+}
+
+function alterarNomeEquipe(id_equipe)
+{
+	var equipeID = id_equipe;
+	var modal = bootbox.dialog({
+		message: $(".form-content").html(),
+		title: "Alterar Nome",
+		buttons:[
+			{
+				label: "Alterar",
+				className: "btn btn-primary pull-left",
+				callback: function()
+				{
+					var form = modal.find(".form");
+					var items = form.serialize();
+					
+					$.post("../classes/alterarNomeEquipe.php",{novoNome: items, id_equipe: equipeID},function(msg_retorno){
+					 bootbox.alert({
+					 	title: "Alteração de Nome",
+					  		message: msg_retorno,
+					  		callback: function()
+					  		{
+									console.log(msg_retorno);
+									location.reload(true);
+					  		}
+					  	});
+					});
+				}
+			},
+			{
+				label: "Fechar",
+				className: "btn btn-default pull-left",
+				callback: function() {
+					console.log("Fechado");
+				}
+			}
+		],
+		show: false,
+		onEscape: function() {
+			modal.modal("hide")
+		}
+	});
+	modal.modal("show");
 }
