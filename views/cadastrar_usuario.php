@@ -29,13 +29,13 @@
       <div class="col-md-2"></div>
 
       <div class="form-group col-md-4">
-        <label for="campo1">Nome Usuário</label>
-        <input type="text" name="nomeUsuario" class="form-control" placeholder="Digite o nome do Usuário" id="campo1">
+        <label for="campo1">Nome</label>
+        <input type="text" name="nomeUsuario" class="form-control" placeholder="Digite o Nome" id="campo1">
       </div>
       
       <div class="form-group col-md-4">
         <label for="campo2">Usuário</label>
-        <input type="text" name="user" class="form-control"  placeholder="Digite o usuario" id="campo3">
+        <input type="email" name="user" class="form-control"  placeholder="Digite o email" id="campo2">
       </div>
     </div>
     
