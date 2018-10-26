@@ -114,21 +114,37 @@
                       $resultado[7] = 1;
                     }
                     if(sizeOf($clienteFibra) >= 1)
+                    {
                       $resultado[6] = 30.00 + ($resultado[8] * 20.00);//se for fibra o valor e esse
-                    else
+                      $desativado = "disabled";
+                    }else{
                       $resultado[6] = 26.56 + ($resultado[8] * 18.00);//se for hfc
+                      $desativado = "disabled";
+                    }
                   }elseif($resultado[7] == 1 AND $resultado[8] >=0)
                   {
                     if(sizeOf($clienteFibra) >= 1)
+                    {
                       $resultado[6] = 30.00 + ($resultado[8] * 20.00);//se for fibra o valor e esse
+                      $desativado = "disabled";
+                    }
                     else
+                    {
                       $resultado[6] = 26.56 + ($resultado[8] * 18.00);
+                      $desativado = "disabled";
+                    }
                   }elseif($resultado[7] < 1 AND $resultado[8] >=1) //;se for somente para instalar o ponto adicional.
                   {
                     if(sizeOf($clienteFibra) >= 1)
+                    {
                       $resultado[6] = 30.00 + (($resultado[8] - 1) * 20.00);//diminui 1 porque 1 ponto tem o valor completo
+                      $desativado = "disabled";
+                    }
                     else
+                    {
                       $resultado[6] = 26.56 + (($resultado[8] - 1) * 18.00);
+                      $desativado = "disabled";
+                    }
                   }
                 }elseif(strpos($resultado[0],"DESCONEXAO") !== FALSE )
                 {
@@ -146,15 +162,27 @@
                         $resultado[7] = 1;
                     }
                     if(sizeOf($clienteFibra) >= 1)
+                    {
                       $resultado[6] = 80.00 + ($resultado[8] * 20.00);
+                      $desativado = "disabled";
+                    } 
                     else
+                    { 
                       $resultado[6] = 65.86 + ($resultado[8] * 18.00);
+                      $desativado = "disabled";
+                    }
                   }elseif($resultado[7] == 1 AND $resultado[8] >=0)
                   { 
                     if(sizeOf($clienteFibra) >= 1)
+                    {
                       $resultado[6] = 80.00 + ($resultado[8] * 20.00);
+                      $desativado = "disabled";
+                    }
                     else
+                    {
                       $resultado[6]= 65.86 + ($resultado[8] * 18.00 );
+                      $desativado = "disabled";
+                    }
                   }
                 }
                 elseif(strpos($resultado[0],"RECONEXAO") !== FALSE )
@@ -168,16 +196,28 @@
                           $resultado[7] = 1;
                       }
                       if(sizeOf($clienteFibra) >= 1)
+                      {
                         $resultado[6] = 80.00 + ($resultado[8] * 20.00);
+                        $desativado = "disabled";
+                      }
                       else
+                      {
                         $resultado[6] = 65.86 + ($resultado[8] * 18.00);
+                        $desativado = "disabled";
+                      }
                     }
                     elseif($resultado[7] == 1 AND $resultado[8] >=0)
                     {
                       if(sizeOf($clienteFibra) >= 1)
+                      {  
                         $resultado[6] = 80.00 + ($resultado[8] * 20.00);
+                        $desativado = "disabled";
+                      }
                       else
+                      {
                         $resultado[6]= 65.86 + ($resultado[8] * 18.00);
+                        $desativado = "disabled";
+                      }
                     }
                 }
                 elseif($resultado[7] > 1 AND $resultado[8] >= 0)
@@ -190,17 +230,25 @@
                     $resultado[7] = 1;
                   }
                   if(sizeOf($clienteFibra) >= 1)
+                  {
                     $resultado[6] = 80.00 + ($resultado[8] * 20.00);
+                    $desativado = "disabled";
+                  }
                   else
+                  {
                     $resultado[6] = 65.86 + ($resultado[8] * 18);
+                    $desativado = "disabled";
+                  }
                 }
                 elseif($resultado[7] == 1 AND sizeof($clienteFibra) >=1)
                 {
                   if($resultado[8] >= 0)
                   {
                     $resultado[6] = 80.00 + ($resultado[8] * 20.00);//se for predio
+                    $desativado = "disabled";
                   }else{
                     $resultado[6] = 80.00;
+                    $desativado = "disabled";
                   }
                 }
                 elseif($resultado[7] == 0 AND sizeOf($clienteFibra)>=1)
@@ -216,9 +264,11 @@
                   if($resultado[8] > 0)
                   {
                     $resultado[6] = 80 + ($resultado[8] * 20.00);
+                    $desativado = "disabled";
                   }
                   else{
                     $resultado[6] = 80;
+                    $desativado = "disabled";
                   }
                 }
               }//FIM TIPO ASSISTENCIA
@@ -235,20 +285,33 @@
                       $resultado[7] = 1;
                     }
                     if(sizeOf($clienteFibra) >= 1)
+                    {
                       $resultado[6] = 30.00 + ($resultado[8] * 20.00);
+                      $desativado = "disabled";
+                    }
                     else
+                    {
                       $resultado[6] = 26.56 + ($resultado[8] * 18.00);
+                      $desativado = "disabled";
+                    }
                   }elseif($resultado[7] == 1 AND $resultado[8] >=0)
                   {
                     if(sizeOf($clienteFibra) >= 1)
+                    {
                       $resultado[6] = 30.00 + ($resultado[8] * 20.00);
+                      $desativado = "disabled";
+                    }
                     else
+                    {
                       $resultado[6] = 26.56 + ($resultado[8] * 18.00);
+                      $desativado = "disabled";
+                    }
                   }
                 }
                 elseif(strpos($resultado[0],"DESCONEXAO ") !== FALSE )
                 {
                   $resultado[6] = 25.00;
+                  $desativado = "disabled";
                 }
                 elseif(strpos($resultado[0],"TRANSFERENCIA") !== FALSE)
                 {
@@ -261,16 +324,28 @@
                         $resultado[7] = 1;
                     }
                     if(sizeOf($clienteFibra) >= 1)
+                    {
                       $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
-                    else  
+                      $desativado = "disabled";
+                    }
+                    else
+                    {
                       $resultado[6] = 38.24 + ($resultado[8] * 18.00);
+                      $desativado = "disabled";
+                    }
                   }
                   elseif($resultado[7] == 1 AND $resultado[8] >=0)
                   {
                     if(sizeOf($clienteFibra) >= 1)
+                    {
                       $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
+                      $desativado = "disabled";
+                    }
                     else
-                      $resultado[6]= 38.24 + ($resultado[8] * 18.00 );
+                    {
+                      $resultado[6] = 38.24 + ($resultado[8] * 18.00);
+                      $desativado = "disabled";
+                    }
                   }
                 }
                 elseif(strpos($resultado[0],"RECONEXAO") !== FALSE )
@@ -284,16 +359,28 @@
                         $resultado[7] = 1;
                     }
                     if(sizeOf($clienteFibra) >= 1)
+                    {
                       $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
+                      $desativado = "disabled";
+                    }
                     else
+                    {
                       $resultado[6] = 38.24 + ($resultado[8] * 18.00);
+                      $desativado = "disabled";
+                    }
                   }
                   elseif($resultado[7] == 1 AND $resultado[8] >=0)
                   {
                     if(sizeOf($clienteFibra) >= 1)
+                    {
                       $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
+                      $desativado = "disabled";
+                    }
                     else
-                      $resultado[6]= 38.24 + ($resultado[8] * 18.00);
+                    {
+                      $resultado[6] = 38.24 + ($resultado[8] * 18.00);
+                      $desativado = "disabled";
+                    }
                   }
                 }
                 elseif($resultado[7] > 1 AND $resultado[8] >= 0) //se primeira conexao predio
@@ -305,17 +392,25 @@
                     $resultado[7] = 1;
                   }
                   if(sizeOf($clienteFibra) >= 1)
+                  {
                     $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
+                    $desativado = "disabled";
+                  }
                   else
-                    $resultado[6] =  38.24 + ($resultado[8] * 18.00);
+                  {
+                    $resultado[6] = 38.24 + ($resultado[8] * 18.00);
+                    $desativado = "disabled";
+                  }
                 }
                 elseif($resultado[7] == 1 AND sizeOf($clienteFibra) >=1)
                 {
                   if($resultado[8] >= 0)
                   {
                     $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
+                    $desativado = "disabled";
                   }else{
                     $resultado[6] = 55.00;
+                    $desativado = "disabled";
                   }
                 }
                 elseif($resultado[7] == 0 AND sizeOf($clienteFibra)>=1)//se no Cplus vier zerado
@@ -331,9 +426,11 @@
                   if($resultado[8] > 0)
                   {
                     $resultado[6] = 55.00 + ($resultado[8] * 20.00);
+                    $desativado = "disabled";
                   }
                   else{
                     $resultado[6] = 55.00;
+                    $desativado = "disabled";
                   }
                 }
               }//FIM DE OUTROS SEM SER ASSISTENCIA (INSTALACAO)
@@ -348,7 +445,7 @@
                       <th>$resultado[8]</th>
                       <th>$resultado[9]</th>
                       <td>
-                          <button class='btn btn-default' onClick = ajustarValorComissao($resultado[4])>
+                          <button class='btn btn-default' onClick = ajustarValorComissao($resultado[4]) $desativado>
                             <span class='glyphicon glyphicon-cog'></span>
                           </button>
                       </td>
