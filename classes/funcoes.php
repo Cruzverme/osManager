@@ -1,5 +1,30 @@
 <?php 
 
+
+  function converteData($data)
+  {
+
+    list($dia,$mes,$ano) = explode('/',$data);
+
+    switch($mes)
+    {
+      case '01': $mes = 'JAN';break;
+      case '02': $mes = 'FEB';break;
+      case '03': $mes = 'MAR';break;
+      case '04': $mes = 'APR';break;
+      case '05': $mes = 'MAY';break;
+      case '06': $mes = 'JUN';break;
+      case '07': $mes = 'JUL';break;
+      case '08': $mes = 'AUG';break;
+      case '09': $mes = 'SEP';break;
+      case '10': $mes = 'OCT';break;
+      case '11': $mes = 'NOV';break;
+      case '12': $mes = 'DEC';break;
+    }
+    return "$dia/$mes/$ano";
+  }
+
+
  // $dataI='01/OCT/2018';
  // $dataF='31/OCT/2018';
  // $contrato=42293;

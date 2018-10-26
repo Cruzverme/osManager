@@ -77,7 +77,7 @@
 
             <div class="col-md-6 form-group date">
               <label for="dataCalendario" > Selecione o dia correto da Execução</label>
-              <input type="text" class="form-control" id="dataCalendario" name="data"/>
+              <input type="text" name="data" class="form-control" id="dataCalendario"/>
             </div>
 
           </div>
