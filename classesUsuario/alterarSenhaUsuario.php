@@ -1,26 +1,37 @@
 <?php 
   include "../config/db.php";
-
-  session_start();
+  include "../classes/verifica_sessao.php";
 
   $id_usuario = filter_input(INPUT_POST,"id_usuario");
   $parametros = filter_input(INPUT_POST,"parametros");
   
-  list($separarPermissao,$separarSenha) = explode('&',$parametros);
-  $senha = explode('password=',$separarSenha);
-  $permissao = explode('permissao=',$separarPermissao);
+  if($permissao == 99) 
+  {
+    list($separarPermissao,$separarSenha) = explode('&',$parametros);
+    $senha = explode('password=',$separarSenha);
+    $permissao_usuario = explode('permissao=',$separarPermissao);
+  }
+  else
+    $senha = explode('password=',$parametros);
   
   if($senha && $id_usuario)
   {  
     if($senha[1] != '')
     {
-      $novaSenha = md5($senha[1]);
-      $sql_altera_senha = "UPDATE system_user SET password = '$novaSenha',nivel_usuario=$permissao[1]
-       WHERE id = $id_usuario";
+      if(!isset($permissao_usuario))
+      {
+        $novaSenha = md5($senha[1]);
+        $sql_altera_senha = "UPDATE system_user SET password = '$novaSenha'
+          WHERE id = $id_usuario";
+      }else{
+        $novaSenha = md5($senha[1]);
+        $sql_altera_senha = "UPDATE system_user SET password = '$novaSenha',nivel_usuario=$permissao_usuario[1]
+          WHERE id = $id_usuario";
+      }
     }
     else
     {
-      $sql_altera_senha = "UPDATE system_user SET nivel_usuario=$permissao[1]
+      $sql_altera_senha = "UPDATE system_user SET nivel_usuario=$permissao_usuario[1]
        WHERE id = $id_usuario";
     }
       

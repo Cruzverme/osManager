@@ -21,6 +21,8 @@ echo "
         <li><a href=comissao_equipe.php>Comissão de Equipes</a></li>";
         if($permissao == 99)
           echo "<li><a href=gerenciar_usuarios.php>Gerenciar Usuários</a></li>";
+        else
+          echo "<li><a href=gerenciar_usuarios.php>Gerenciar Usuário</a></li>";
 echo"
         <li><a href=../classesUsuario/logout.php>Sair</a></li>
       </ul>

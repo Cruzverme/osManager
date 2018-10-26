@@ -3,7 +3,11 @@
   
   include "../classes/header.php";
   
-  $sql_usuario = "select * from system_user";
+  if($permissao == 99)
+    $sql_usuario = "select * from system_user";
+  else
+    $sql_usuario = "select * from system_user where id = $user_ativo";
+
   $executa = mysqli_query($conectar,$sql_usuario);
 
 ?>
@@ -46,10 +50,14 @@
                     <td>
                       <button name='alterarSenha' class='btn btn-default' onClick=alterarSenhaUsuario($row[id]) >
                         <span class='glyphicon glyphicon-cog' aria-hidden='true'></span>
-                      </button>
-                      <button name='deletar' class='btn btn-default' onClick=removerUsuario($row[id])>
+                      </button>";
+            if($permissao == 99)
+            {
+              echo "  <button name='deletar' class='btn btn-default' onClick=removerUsuario($row[id])>
                         <span class='glyphicon glyphicon-trash' aria-hidden='true'></span>
-                      </button>
+                      </button>";
+            }                      
+            echo "         
                     </td>
                   </tr>";
           }
@@ -63,13 +71,20 @@
 <!-- MODAL -->
     <div class="form-content" style="display:none;">
       <form class="form" role="form">
-        <div class="form-group">
-          <label for="permissao">Alterar Tipo de Usuário</label>
-          <select class="form-control" name=permissao>
-            <option value=0>Usuário</option>
-            <option value=99>Administrador</option>
-          </select>
-        </div>
+        <?php 
+          if($permissao == 99)
+          {
+            echo "<div class='form-group'>
+                    <label for='permissao'>Alterar Tipo de Usuário</label>
+                    <select class='form-control' name=permissao>
+                      <option value=0>Usuário</option>
+                      <option value=99>Administrador</option>
+                    </select>
+                  </div>
+                  ";
+          }
+        ?>
+        
         <div class="form-group">
           <label for="password">Digite a Nova Senha</label>
           <input type="password" class="form-control" id="password" name="password" placeholder="Password">
