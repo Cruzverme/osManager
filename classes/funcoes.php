@@ -25,8 +25,28 @@
     }
     return $array;
   }
+  
+  function verificarPontos($contrato,$ordemServico)
+  {
+    include "../config/db_oracle.php";
+    
+    $sql = "select count(pontos.contra) from cplus.tva1600 pontos
+    join cplus.tva1700 os on pontos.contra = os.contra 
+    where os.os = $ordemServico and pontos.codsit = 27 and pontos.contra = $contrato and pontos.codprog != 325 ";
+
+    $prepara_query = oci_parse($conn,$sql); 
+    oci_execute($prepara_query);
+    $array = array();
+    while ($resultado = oci_fetch_array($prepara_query, OCI_BOTH))
+    {
+      array_push($array,$resultado[0]);
+    }
+    return $array;
+  }
+//  $ok = verificarPontos(29431,561113);
+    
 //  $ok =  verificaPacote(452,'01/OCT/2018','23/OCT/2018');//42293,'01/OCT/2018','31/OCT/2018');
-//  echo $ok;
+//  echo $ok[0];
 //   echo sizeOf($ok);
 //  if(sizeOf($ok) >= 1)
 //    echo "eaeae";

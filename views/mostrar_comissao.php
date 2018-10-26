@@ -92,8 +92,15 @@
             $quantidade_OS = 0;
             while ($resultado = oci_fetch_array($sql_comissao, OCI_BOTH))
             {
+              $desativado = "";
               $clienteFibra = verificaPacote($resultado[5],$dataInicial,$dataFinal,$resultado[3]);
-
+              $pontosDoCliente = verificarPontos($resultado[5],$resultado[4]);
+              if(sizeOf($clienteFibra) >= 1)
+              {
+                $resultado[0] = "$resultado[0]-FTTH";
+              }else{
+                $resultado[0] = "$resultado[0]-HFC";
+              }
               if($tipo != "Assistência" and $resultado[9] == null ) //SEM APARTAMENTO
               {
                 if(strpos($resultado[0],"CONEXAO PONTO ADICIONAL") !== FALSE)
@@ -196,6 +203,24 @@
                     $resultado[6] = 80.00;
                   }
                 }
+                elseif($resultado[7] == 0 AND sizeOf($clienteFibra)>=1)
+                {
+                  if($pontosDoCliente[0] > 1)
+                  {
+                    $resultado[7] = 1;
+                    $resultado[8] = $pontosDoCliente[0] - $resultado[7];
+                  }else{
+                    $resultado[7] = $pontosDoCliente[0];
+                    $resultado[8] = 0;
+                  }
+                  if($resultado[8] > 0)
+                  {
+                    $resultado[6] = 80 + ($resultado[8] * 20.00);
+                  }
+                  else{
+                    $resultado[6] = 80;
+                  }
+                }
               }//FIM TIPO ASSISTENCIA
               elseif($tipo != "Assistência" and $resultado[9] != null)
               {
@@ -271,7 +296,7 @@
                       $resultado[6]= 38.24 + ($resultado[8] * 18.00);
                   }
                 }
-                elseif($resultado[7] > 1 AND $resultado[8] >= 0)
+                elseif($resultado[7] > 1 AND $resultado[8] >= 0) //se primeira conexao predio
                 {
                   $resultado[7] = $resultado[7] - 1;
                   $resultado[8] = $resultado[8] + $resultado[7];
@@ -284,12 +309,30 @@
                   else
                     $resultado[6] =  38.24 + ($resultado[8] * 18.00);
                 }
-                elseif($resultado[7] == 1 AND sizeof($clienteFibra) >=1)
+                elseif($resultado[7] == 1 AND sizeOf($clienteFibra) >=1)
                 {
                   if($resultado[8] >= 0)
                   {
                     $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
                   }else{
+                    $resultado[6] = 55.00;
+                  }
+                }
+                elseif($resultado[7] == 0 AND sizeOf($clienteFibra)>=1)//se no Cplus vier zerado
+                {
+                  if($pontosDoCliente[0] > 1)
+                  {
+                    $resultado[7] = 1;
+                    $resultado[8] = $pontosDoCliente[0] - $resultado[7];
+                  }else{
+                    $resultado[7] = $pontosDoCliente[0];
+                    $resultado[8] = 0;
+                  }
+                  if($resultado[8] > 0)
+                  {
+                    $resultado[6] = 55.00 + ($resultado[8] * 20.00);
+                  }
+                  else{
                     $resultado[6] = 55.00;
                   }
                 }
