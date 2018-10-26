@@ -13,7 +13,13 @@
 <body>
 
   <div class=container-fluid>
-    
+    <div class=row>
+      <div class='col-md-2 col-md-offset-5'>
+        <figure>
+          <img src="../assets/images/logo.jpg" alt="Logo Vertv">
+        </figure>
+      </div>
+    </div>
     <div class=row>
       <div class='col-md-12'>
         <?php echo "<center><h1>Comissão de $tipo da $equipe entre $dataInicial - $dataFinal </h1></center>";?>
