@@ -7,13 +7,14 @@
   $ordemServico = filter_input(INPUT_POST,"os");
   $dataExecucao = filter_input(INPUT_POST,"data");
 
-  $dataExecucao = converteData($dataExecucao);
-
   if($ordemServico && $dataExecucao)
   {
-    $update_data_os = oci_parse($conn,"UPDATE cplus.tva1700 SET DTEXEC ='$dataExecucao' 
+    $diaExecucao = converteData($dataExecucao);
+
+    $update_data_os = oci_parse($conn,"UPDATE cplus.tva1700 SET DTEXEC ='$diaExecucao' 
                         WHERE OS = $ordemServico ");
     $executa = oci_execute($update_data_os);
+    
     if($executa)
     {
       oci_free_statement($update_data_os);
