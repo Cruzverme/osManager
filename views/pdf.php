@@ -421,26 +421,26 @@
         }
       }//FIM DE OUTROS SEM SER ASSISTENCIA (INSTALACAO)
 
-    }//FIM WHILE
-
     $mpdf->WriteHTML("    
             <tbody>
               <tr>
-                <td>[0]</td>
-                <td>[1]</td>
-                <td>[2]</td>
-                <td>[4]</td>
-                <td>[5]</td>
-                <td>[6]</td>
-                <td>[7]</td>
-                <td>[8]</td>
-                <td>[9]</td>
+                <td>$resultado[0]</td>
+                <td>$resultado[1]</td>
+                <td>$resultado[2]</td>
+                <td>$resultado[4]</td>
+                <td>$resultado[5]</td>
+                <td>$resultado[6]</td>
+                <td>$resultado[7]</td>
+                <td>$resultado[8]</td>
+                <td>$resultado[9]</td>
               </tr>
             </tbody>
           </table>
         </div> 
       </div>    
     ",2);
+
+    }//FIM WHILE
 
     $mpdf->WriteHTML("
       <p>Valor a ser pago: R$".str_replace('.',',',$soma)." | Total de OS: ".$quantidade_OS."</p>
