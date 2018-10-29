@@ -46,6 +46,7 @@
                 <th>APTO</th>
               </tr>
             </thead>
+            <tbody>
     ");
 
     $dataInicial = converteData($dataInicial);
@@ -422,7 +423,6 @@
       }//FIM DE OUTROS SEM SER ASSISTENCIA (INSTALACAO)
 
     $mpdf->WriteHTML("    
-            <tbody>
               <tr>
                 <td>$resultado[0]</td>
                 <td>$resultado[1]</td>
@@ -434,17 +434,18 @@
                 <td>$resultado[8]</td>
                 <td>$resultado[9]</td>
               </tr>
-            </tbody>
-          </table>
-        </div> 
-      </div>    
     ",2);
 
     }//FIM WHILE
 
+    
     $mpdf->WriteHTML("
-      <p>Valor a ser pago: R$".str_replace('.',',',$soma)." | Total de OS: ".$quantidade_OS."</p>
-    ");
+            </tbody>
+          </table>
+        </div> 
+        <p>Valor a ser pago: R$".str_replace('.',',',$soma)." | Total de OS: ".$quantidade_OS."</p>
+      </div>
+    ",2);
     
     $mpdf->Output();
 
