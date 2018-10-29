@@ -424,18 +424,20 @@
 
     $mpdf->WriteHTML("    
               <tr>
-                <td>$resultado[0]</td>
-                <td>$resultado[1]</td>
-                <td>$resultado[2]</td>
-                <td>$resultado[4]</td>
-                <td>$resultado[5]</td>
-                <td>$resultado[6]</td>
-                <td>$resultado[7]</td>
-                <td>$resultado[8]</td>
-                <td>$resultado[9]</td>
+                <td>'$resultado[0]'</td>
+                <td>'$resultado[1]'</td>
+                <td>'$resultado[2]'</td>
+                <td>'$resultado[4]'</td>
+                <td>'$resultado[5]'</td>
+                <td>'$resultado[6]'</td>
+                <td>'$resultado[7]'</td>
+                <td>'$resultado[8]'</td>
+                <td>'$resultado[9]'</td>
               </tr>
     ",2);
-
+      $quantidade_OS+=1;
+      $valor_comissao = str_replace(',','.',$resultado[6]);
+      $soma+=$valor_comissao;
     }//FIM WHILE
 
     
