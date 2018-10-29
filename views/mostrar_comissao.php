@@ -26,11 +26,15 @@
       </div>
     </div>
     <div class=row>
-      <div class='pull-right'>
-        <a target=_blank class='btn btn-info' href=<?php echo "pdf.php?start=$dataInicial&end=$dataFinal&tipoRelatorio=$tipo&equipe=$equipe"; ?>>
-          <span class='glyphicon glyphicon-save-file'> Gerar PDF</span>
-        </a>
-      </div>
+     <form action="pdf.php" target="_blank" method="POST">
+        <div class='col-md-12'>
+          <button type='submit' class='btn btn-info pull-right'> <span class='glyphicon glyphicon-save-file'>  GERAR PDF</span></button>
+        <div>
+        <input type="hidden" name="tipoRelatorio" value="<?php echo $tipo ?>" />
+        <input type="hidden" name="equipe" value="<?php echo $equipe ?>" />
+        <input type="hidden" name="start" value="<?php echo $dataInicial ?>" />
+        <input type="hidden" name="end" value="<?php echo $dataFinal ?>" />
+     </form>
     </div>
     
     <div class="table-responsive col-md-12">

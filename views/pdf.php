@@ -4,18 +4,19 @@
   include "../classes/funcoes.php";
   include "../config/db_oracle.php";
 
-  $equipe = filter_input(INPUT_GET,"equipe");
-  $tipo = filter_input(INPUT_GET,"tipoRelatorio");
-  $dataInicial = filter_input(INPUT_GET,"start");
-  $dataFinal = filter_input(INPUT_GET,"end");
-
+  $equipe = filter_input(INPUT_POST,"equipe");
+  $tipo = filter_input(INPUT_POST,"tipoRelatorio");
+  $dataInicial = filter_input(INPUT_POST,"start");
+  $dataFinal = filter_input(INPUT_POST,"end");
   try {
+   
     $mpdf = new \Mpdf\Mpdf();
     $stylesheet = file_get_contents('../assets/css/pdf.css');
     $mpdf->WriteHTML($stylesheet,1);
+    $mpdf->WriteHTML("<title>Comissão de $equipe </title>",1);
     $mpdf->shrink_tables_to_fit = 1;
     $mpdf->WriteHTML("
-    
+     
       <div class=container-fluid>
         <div class=row>
           <div class='col-md-2 col-md-offset-5'>
@@ -51,24 +52,24 @@
 
     $dataInicial = converteData($dataInicial);
     $dataFinal = converteData($dataFinal);
-
+    
     if($tipo == "assistencia")
     {
       $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
                   FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
-                  b.nome = '$equipe' AND a.codequ = b.codequ AND a.codsere is not null  AND 
+                  b.nome = LIKE '%$equipe%' AND a.codequ = b.codequ AND a.codsere is not null  AND 
                   a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codser LIKE '3%' 
                   ORDER BY a.dtexec ASC");
     }elseif($tipo == "instalacao"){
       $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
                   FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
-                  b.nome = '$equipe' AND a.codequ = b.codequ AND a.codsere is not null  AND 
+                  b.nome LIKE'%$equipe%' AND a.codequ = b.codequ AND a.codsere is not null  AND 
                   a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codser NOT LIKE '3%' 
                   ORDER BY a.dtexec ASC");
     }else{
       $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
                   FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
-                  b.nome = '$equipe' AND a.codequ = b.codequ AND a.codsere is not null  AND 
+                  b.nome LIKE '%$equipe%' AND a.codequ = b.codequ AND a.codsere is not null  AND 
                   a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser
                   ORDER BY a.dtexec ASC");
     }
@@ -76,12 +77,11 @@
     
     $soma = 0.00;
     $quantidade_OS = 0;
-
     while ($resultado = oci_fetch_array($sql_comissao, OCI_BOTH))
     {
-      $desativado = "";
       $clienteFibra = verificaPacote($resultado[5],$dataInicial,$dataFinal,$resultado[3]);
       $pontosDoCliente = verificarPontos($resultado[5],$resultado[4]);
+      
       if(sizeOf($clienteFibra) >= 1)
       {
         $resultado[0] = "$resultado[0]-FTTH";
@@ -424,15 +424,15 @@
 
     $mpdf->WriteHTML("    
               <tr>
-                <td>'$resultado[0]'</td>
-                <td>'$resultado[1]'</td>
-                <td>'$resultado[2]'</td>
-                <td>'$resultado[4]'</td>
-                <td>'$resultado[5]'</td>
-                <td>'$resultado[6]'</td>
-                <td>'$resultado[7]'</td>
-                <td>'$resultado[8]'</td>
-                <td>'$resultado[9]'</td>
+                <td>$resultado[0]</td>
+                <td>$resultado[1]</td>
+                <td>$resultado[2]</td>
+                <td>$resultado[4]</td>
+                <td>$resultado[5]</td>
+                <td>$resultado[6]</td>
+                <td>$resultado[7]</td>
+                <td>$resultado[8]</td>
+                <td>$resultado[9]</td>
               </tr>
     ",2);
       $quantidade_OS+=1;
@@ -445,10 +445,9 @@
             </tbody>
           </table>
         </div> 
-        <p>Valor a ser pago: R$".str_replace('.',',',$soma)." | Total de OS: ".$quantidade_OS."</p>
+        <p>Valor a ser pago: R$ ".str_replace('.',',',$soma)." | Total de OS: ".$quantidade_OS."</p>
       </div>
     ",2);
-    
     $mpdf->Output();
 
   } catch (\Mpdf\MpdfException $e) {
