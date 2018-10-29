@@ -25,6 +25,13 @@
         <?php echo "<center><h1>Comissão de $tipo da $equipe entre $dataInicial - $dataFinal </h1></center>";?>
       </div>
     </div>
+    <div class=row>
+      <div class='pull-right'>
+        <a target=_blank class='btn btn-info' href="pdf.php">
+          <span class='glyphicon glyphicon-save-file'> Gerar PDF</span>
+        </a>
+      </div>
+    </div>
     
     <div class="table-responsive col-md-12">
       <table class="table table-striped table-hover display" id='tabelaComissao' cellspacing="0" cellpadding="0">
