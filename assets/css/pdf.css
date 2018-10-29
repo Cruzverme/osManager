@@ -1,0 +1,27 @@
+figure{
+  text-align: center;
+}
+
+table{
+  width: 100%;
+  text-align:center;
+  border: 2px solid black;
+}
+
+th{
+  padding: 3mm;
+	border: 1px solid;
+	vertical-align: middle;
+}
+
+td {
+	padding: 3mm;
+	border: 1px solid;
+	vertical-align: middle;
+}
+
+h1{
+  font-size: 15px;
+  text-align: center;
+  margin: 30px;
+}

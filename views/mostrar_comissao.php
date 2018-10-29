@@ -27,7 +27,7 @@
     </div>
     <div class=row>
       <div class='pull-right'>
-        <a target=_blank class='btn btn-info' href="pdf.php">
+        <a target=_blank class='btn btn-info' href=<?php echo "pdf.php?start=$dataInicial&end=$dataFinal&tipoRelatorio=$tipo&equipe=$equipe"; ?>>
           <span class='glyphicon glyphicon-save-file'> Gerar PDF</span>
         </a>
       </div>
@@ -424,15 +424,15 @@
                 }
               }//FIM DE OUTROS SEM SER ASSISTENCIA (INSTALACAO)
               echo "<tr>
-                      <th>$resultado[0]</th>
-                      <th>$resultado[1]</th>
-                      <th>$resultado[2]</th>
-                      <th>$resultado[4]</th>
-                      <th>$resultado[5]</th>
-                      <th>$resultado[6]</th>
-                      <th>$resultado[7]</th>
-                      <th>$resultado[8]</th>
-                      <th>$resultado[9]</th>
+                      <td>$resultado[0]</td>
+                      <td>$resultado[1]</td>
+                      <td>$resultado[2]</td>
+                      <td>$resultado[4]</td>
+                      <td>$resultado[5]</td>
+                      <td>$resultado[6]</td>
+                      <td>$resultado[7]</td>
+                      <td>$resultado[8]</td>
+                      <td>$resultado[9]</td>
                       <td>
                           <button class='btn btn-default' onClick = ajustarValorComissao($resultado[4]) $desativado>
                             <span class='glyphicon glyphicon-cog'></span>
