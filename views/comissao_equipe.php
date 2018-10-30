@@ -10,17 +10,20 @@
   <?php include "../classes/nav.php";?>
   
     <div id="main" class="container-fluid">
-      <div  class="row">
-        <h3 class="page-header">Comissão de Equipes</h3>
+      <div id="top" class="row">
+        <div class="col-md-5">
+          <h2>Comissão de Equipes</h2>
+          <h5>Verifique o Quanto Cada Equipe Receberá</h5>
+        </div>
       
-        <div class="col-md-12">
+        <div class="col-md-7">
           <a href="gerenciarComissao.php" class="btn btn-primary pull-right h2">Ajustar Comissão</a>
         </div>
+        
       </div>
-
+      <hr />
       <form action="mostrar_comissao.php" method="post" target="_blank">
       <!-- area de campos do form -->
-
         <div class="row">
           <div class="form-group col-md-6">
             <label for="campo1">Selecione a Equipe</label>

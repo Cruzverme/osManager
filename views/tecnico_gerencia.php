@@ -12,18 +12,21 @@
 
 
   <div id="main" class="container-fluid">
-    <div class="page-header">
-    <h3>Cadastro de Técnico</h3>
-      <h5>Esta sessão cadastra usuários para acessar o aplicativo</h5>
+    <div id="top" class="row"><!-- <div class="page-header"> -->
+      <div class="col-md-5">
+        <h2>Cadastro de Técnico</h2>
+        <h5>Esta sessão cadastra usuários para acessar o aplicativo</h5>
+      </div>
+      
+      <div class="col-md-7">
+        <a href="cadastrar_tecnico.php" class="btn btn-primary pull-right h2">Cadastrar Técnico</a>
+      </div>
     </div>
-    
-
-    <div class="col-md-12">
-      <a href="cadastrar_tecnico.php" class="btn btn-primary pull-right h2">Cadastrar Técnico</a>
-    </div>
+    <hr />
   </div>
-  <div class="col-md-3"></div>
-  <div class="table-responsive col-md-6">
+  
+  
+  <div class="table-responsive col-md-6 col-md-offset-3">
     <table class="table table-striped table-hover display" id='tabelaOS' cellspacing="0" cellpadding="0">
       <thead>
         <tr>
@@ -55,7 +58,7 @@
       </tbody>
     </table>
   </div>
-  <div class="col-md-3"></div>
+  
 </body>
 
 <!-- MODAL -->

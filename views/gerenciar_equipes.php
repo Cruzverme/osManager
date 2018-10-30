@@ -12,15 +12,16 @@
 
 
   <div id="main" class="container-fluid">
-    <div class="page-header">
-    <h3>Gerencia</h3>
-      <h5>Esta sessão gerencia as equipes</h5>
+    <div id="top" class="row"><!-- <div class="page-header"> -->
+      <div class="col-md-5">
+        <h2>Gerencia de Equipes</h2>
+        <h5>Esta sessão gerencia as equipes</h5>
+      </div>
+      <div class="col-md-7">
+        <a href="terceirizados.php" class="btn btn-primary pull-right h2">Nova Equipe</a>
+      </div>
     </div>
-    
-
-    <div class="col-md-12">
-      <a href="terceirizados.php" class="btn btn-primary pull-right h2">Nova Equipe</a>
-    </div>
+    <hr>
   </div>
   <div class="col-md-3"></div>
   <div class="table-responsive col-md-6">

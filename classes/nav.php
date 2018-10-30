@@ -15,7 +15,6 @@ echo "
     <div id='navbar' class='navbar-collapse collapse'>
       <ul class='nav navbar-nav navbar-right'>
         <li><a href=os_ativa.php>Início</a></li>
-        <li><a href=cadastrar_os.php>Designar Ordem de Serviço</a></li>
         <li><a href=tecnico_gerencia.php>Gerenciar Técnico</a></li>
         <li><a href=gerenciar_equipes.php>Gerencia de Equipe</a></li>
         <li><a href=comissao_equipe.php>Comissão de Equipes</a></li>";
