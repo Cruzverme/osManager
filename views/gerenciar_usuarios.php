@@ -16,12 +16,18 @@
 
 
   <div id="main" class="container-fluid">
-    <h3 class="page-header">Cadastro de Usuário</h3>
+    <div id="top" class="row">
+      <div class="col-md-5">
+        <h2>Gerencia de Usuário</h2>
+        <h5>Gerencie os Usuários para Acessar o sistema</h5>
+      </div>
 
-    <div class="col-md-12">
-      <a href="cadastrar_usuario.php" class="btn btn-primary pull-right h2">Cadastrar Usuário</a>
+      <div class="col-md-7">
+        <a href="cadastrar_usuario.php" class="btn btn-primary pull-right h2">Cadastrar Usuário</a>
+      </div>
     </div>
   </div>
+  <hr/>
   <div class="col-md-3"></div>
   <div class="table-responsive col-md-6">
     <table class="table table-striped table-hover display" id='tabelaOS' cellspacing="0" cellpadding="0">
