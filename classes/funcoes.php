@@ -24,11 +24,6 @@
     return "$dia/$mes/$ano";
   }
 
-
- // $dataI='01/OCT/2018';
- // $dataF='31/OCT/2018';
- // $contrato=42293;
-
   function verificaPacote($contrato,$dataI,$dataF,$equipe)
   {
     include "../config/db_oracle.php";
@@ -68,9 +63,40 @@
     }
     return $array;
   }
+
+  function verificaStatusOS()
+  {
+    include "../config/db_oracle.php";
+    include "../config/db.php";  
+    
+    $sql = ("SELECT ordemServico,tecnico FROM ordensServicos");  
+    $result = mysqli_query($conectar,$sql);
+    mysqli_num_rows($result);
+    if(mysqli_num_rows($result) != 0)
+    {
+      while($resultado = mysqli_fetch_array($result))
+      {
+        $sql_os_cplus = "SELECT count(os.OS) from cplus.tva1700 os where os.os = $resultado[0] AND os.status = 'B' ";
+        $cplus_os = oci_parse($conn,$sql_os_cplus);
+        oci_execute($cplus_os);
+        $linha = oci_fetch_array($cplus_os);
+        $numero_linhas = $linha[0];
+        if($numero_linhas > 0)
+        {
+          $sql = "UPDATE os SET os_concluida = 1 WHERE numero_os = $resultado[0] AND tecnico='$resultado[1]' ";
+          $sql2 = "UPDATE ordensServicos SET status = 1 WHERE ordemServico = $resultado[0] AND tecnico='$resultado[1]'";
+          mysqli_query($conectar,$sql);
+          mysqli_query($conectar,$sql2);
+        }
+      }
+    }
+  }  
+
+//  $ok = verificaStatusOS();
 //  $ok = verificarPontos(29431,561113);
     
 //  $ok =  verificaPacote(452,'01/OCT/2018','23/OCT/2018');//42293,'01/OCT/2018','31/OCT/2018');
+//  var_dump($ok);
 //  echo $ok[0];
 //   echo sizeOf($ok);
 //  if(sizeOf($ok) >= 1)

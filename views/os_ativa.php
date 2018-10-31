@@ -1,7 +1,8 @@
 <?php 
   include "../config/db.php";
   include "../classes/header.php";
-  
+  include "../classes/funcoes.php";
+  verificaStatusOS();  
   ?>
 
   <body>
