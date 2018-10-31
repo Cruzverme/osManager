@@ -11,22 +11,22 @@
 
   if($ordemServico && $contrato && $tipoSituacao && $tecnico)
   {
-    if($tipoSituacao == "Concluir")
+    if($tipoSituacao == "Reativar")
     {
-      $update_situacao = mysqli_query($conectar,"UPDATE ordensservicos SET status = 1
+      $update_situacao = mysqli_query($conectar,"UPDATE ordensServicos SET status = 0
         WHERE ordemServico = $ordemServico AND contrato = $contrato");
 
-      $update_situacao_os_app = mysqli_query($conectar,"UPDATE os SET os_concluida = 1
+      $update_situacao_os_app = mysqli_query($conectar,"UPDATE os SET os_concluida = 0
         WHERE numero_os = $ordemServico AND tecnico = '$tecnico' ");
 
     }else{
-      $update_situacao = mysqli_query($conectar,"UPDATE ordensservicos SET status = 2
+      $update_situacao = mysqli_query($conectar,"UPDATE ordensServicos SET status = 2
         WHERE contrato = $contrato AND ordemServico = $ordemServico ");
       
       $update_situacao_os_app = mysqli_query($conectar,"UPDATE os SET os_concluida = 0
         WHERE numero_os = $ordemServico AND tecnico = '$tecnico' ");
     }
-    
+     
     if($update_situacao_os_app && $update_situacao)
     {
       echo "OS $ordemServico do Contrato $contrato Alterada";

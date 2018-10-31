@@ -69,7 +69,7 @@
     include "../config/db_oracle.php";
     include "../config/db.php";  
     
-    $sql = ("SELECT ordemServico,tecnico FROM ordensServicos");  
+    $sql = ("SELECT ordemServico,tecnico FROM ordensServicos WHERE status <> 1");  
     $result = mysqli_query($conectar,$sql);
     mysqli_num_rows($result);
     if(mysqli_num_rows($result) != 0)

@@ -3,7 +3,7 @@
   include "../classes/header.php";
   include "../classes/funcoes.php";
   verificaStatusOS();  
-  ?>
+?>
 
   <body>
     <?php  
@@ -115,15 +115,15 @@
                   <td>$row[servicoExecutado]</td>
                   <td>$row[diaExecutado]</td>";
                   
-                  if($row['status'] == 0)
+                  if($row['status'] == 0 || $row['status'] == 2 )
                     $situacao = "";
                   else
                     $situacao = "disabled";
                   
                   echo"
                   <td class='actions'>
-                    <a class='btn btn-success btn-xs' $situacao onClick=alterarSituacaoOrdem($row[ordemServico],$row[contrato],'$row[tecnico]','Concluir')>
-                      <span class='glyphicon glyphicon-ok' aria-hidden='true'>
+                    <a class='btn btn-warning btn-xs' $situacao onClick=alterarSituacaoOrdem($row[ordemServico],$row[contrato],'$row[tecnico]','Reativar')>
+                      <span class='glyphicon glyphicon-resize-small' aria-hidden='true'>
                       </span>
                     </a>
                     <!--<a class='btn btn-warning btn-xs' href='#' $situacao>
