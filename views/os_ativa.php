@@ -122,18 +122,18 @@
                   
                   echo"
                   <td class='actions'>
-                    <a class='btn btn-warning btn-xs' $situacao onClick=alterarSituacaoOrdem($row[ordemServico],$row[contrato],'$row[tecnico]','Reativar')>
+                    <button class='btn btn-warning btn-xs' onClick=alterarSituacaoOrdem($row[ordemServico],$row[contrato],'$row[tecnico]','Reativar') $situacao>
                       <span class='glyphicon glyphicon-resize-small' aria-hidden='true'>
                       </span>
-                    </a>
+                    </button>
                     <!--<a class='btn btn-warning btn-xs' href='#' $situacao>
                       <span class='glyphicon glyphicon-minus' aria-hidden='true'>
                       </span>
                     </a>-->
-                    <a class='btn btn-danger btn-xs' $situacao onClick=alterarSituacaoOrdem($row[ordemServico],$row[contrato],'$row[tecnico]','Cancelar') >
+                    <button class='btn btn-danger btn-xs' onClick=alterarSituacaoOrdem($row[ordemServico],$row[contrato],'$row[tecnico]','Cancelar') $situacao>
                       <span class='glyphicon glyphicon-remove' aria-hidden='true'>
                       </span>
-                    </a>
+                    </button>
                   </td>";
 
                   if($row['status'] == 0)
