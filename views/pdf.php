@@ -8,6 +8,14 @@
   $tipo = filter_input(INPUT_POST,"tipoRelatorio");
   $dataInicial = filter_input(INPUT_POST,"start");
   $dataFinal = filter_input(INPUT_POST,"end");
+
+  switch($tipo)
+  {
+    case 'assistencia': $labelTipo = 'Assistência';
+    case 'instalacao': $labelTipo = 'Instalação';
+    case 'desconexao': $labelTipo = 'Desconexão';
+  }
+
   try {
    
     $mpdf = new \Mpdf\Mpdf();
@@ -27,7 +35,7 @@
         </div>
         <div class=row>
           <div class='col-md-12'>
-            <center><h1>Comissão de $tipo da $equipe entre $dataInicial - $dataFinal </h1></center>
+            <center><h1>Comissão de $labelTipo da $equipe entre $dataInicial - $dataFinal </h1></center>
           </div>
         </div>",2);
     

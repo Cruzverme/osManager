@@ -42,6 +42,7 @@
             <select name=tipoRelatorio id=campo2 class=form-control>
               <option value=instalacao>Instalação</option>
               <option value=assistencia>Assistencia</option>
+              <option value=desconexao>Desconexão</option>
             </select>
           </div>
         </div>

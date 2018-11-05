@@ -7,7 +7,15 @@
   $equipe = filter_input(INPUT_POST,"equipe");
   $tipo = filter_input(INPUT_POST,"tipoRelatorio");
   $dataInicial = filter_input(INPUT_POST,"start");
-  $dataFinal = filter_input(INPUT_POST,"end");  
+  $dataFinal = filter_input(INPUT_POST,"end");
+
+  switch($tipo)
+  {
+    case 'assistencia': $labelTipo = 'Assistência';
+    case 'instalacao': $labelTipo = 'Instalação';
+    case 'desconexao': $labelTipo = 'Desconexão';
+
+  } 
 ?>
 
 <body>
@@ -22,7 +30,7 @@
     </div>
     <div class=row>
       <div class='col-md-12'>
-        <?php echo "<center><h1>Comissão de $tipo da $equipe entre $dataInicial - $dataFinal </h1></center>";?>
+        <?php echo "<center><h1>Comissão de $labelTipo da $equipe entre $dataInicial - $dataFinal </h1></center>";?>
       </div>
     </div>
     <div class=row>
@@ -64,20 +72,23 @@
               $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
                           FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
                           b.nome = '$equipe' AND a.codequ = b.codequ AND a.codsere is not null  AND 
-                          a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codser LIKE '3%' 
+                          a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codcla <> 1
+                          AND c.codser NOT LIKE '2%' AND c.nome NOT LIKE 'RETIRADA%'  
                           ORDER BY a.dtexec ASC");
             }elseif($tipo == "instalacao"){
               $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
                           FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
                           b.nome = '$equipe' AND a.codequ = b.codequ AND a.codsere is not null  AND 
-                          a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codser NOT LIKE '3%' 
+                          a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codcla = 1 
                           ORDER BY a.dtexec ASC");
             }else{
-              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
-                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
-                          b.nome = '$equipe' AND a.codequ = b.codequ AND a.codsere is not null  AND 
-                          a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser
-                          ORDER BY a.dtexec ASC");
+              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, c.codser,a.codsere
+                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d 
+                          WHERE a.contra = d.contra AND b.nome = '$equipe' AND a.codequ = b.codequ 
+                          AND a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal' AND a.codser = c.codser AND
+                          (c.codser LIKE '2%'  OR c.nome LIKE '%RETIRADA%')
+                          ORDER BY a.dtexec ASC"
+                          );
             }
            $ok = oci_execute($sql_comissao);
           
@@ -94,7 +105,7 @@
               }else{
                 $resultado[0] = "$resultado[0]-HFC";
               }
-              if($tipo != "Assistência" and $resultado[9] == null ) //SEM APARTAMENTO
+              if(($tipo != "assistencia" AND $tipo != "desconexao") and $resultado[9] == null ) //SEM APARTAMENTO
               {
                 if(strpos($resultado[0],"CONEXAO PONTO ADICIONAL") !== FALSE)
                 {
@@ -265,7 +276,7 @@
                   }
                 }
               }//FIM TIPO ASSISTENCIA
-              elseif($tipo != "Assistência" and $resultado[9] != null)
+              elseif(($tipo != "assistencia" AND $tipo != "desconexao")and $resultado[9] != null)
               {
                 if(strpos($resultado[0],"CONEXAO PONTO ADICIONAL") !== FALSE)
                 {
