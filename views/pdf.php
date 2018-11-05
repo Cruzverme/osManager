@@ -11,9 +11,9 @@
 
   switch($tipo)
   {
-    case 'assistencia': $labelTipo = 'Assistência';
-    case 'instalacao': $labelTipo = 'Instalação';
-    case 'desconexao': $labelTipo = 'Desconexão';
+    case 'assistencia': $labelTipo = 'Assistência';break;
+    case 'instalacao': $labelTipo = 'Instalação';break;
+    case 'desconexao': $labelTipo = 'Desconexão';break;
   }
 
   try {
@@ -65,20 +65,22 @@
     {
       $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
                   FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
-                  b.nome = LIKE '%$equipe%' AND a.codequ = b.codequ AND a.codsere is not null  AND 
-                  a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codser LIKE '3%' 
+                  b.nome = '$equipe' AND a.codequ = b.codequ AND a.codsere is not null  AND
+                  a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codcla <> 1
+                  AND c.codser NOT LIKE '2%' AND c.nome NOT LIKE 'RETIRADA%'
                   ORDER BY a.dtexec ASC");
     }elseif($tipo == "instalacao"){
       $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
                   FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
-                  b.nome LIKE'%$equipe%' AND a.codequ = b.codequ AND a.codsere is not null  AND 
-                  a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codser NOT LIKE '3%' 
+                  b.nome = '$equipe' AND a.codequ = b.codequ AND a.codsere is not null  AND
+                  a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codcla = 1
                   ORDER BY a.dtexec ASC");
     }else{
-      $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
-                  FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
-                  b.nome LIKE '%$equipe%' AND a.codequ = b.codequ AND a.codsere is not null  AND 
-                  a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser
+      $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, c.codser,a.codsere
+                  FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d
+                  WHERE a.contra = d.contra AND b.nome LIKE '%$equipe%' AND a.codequ = b.codequ
+                  AND a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal' AND a.codser = c.codser AND
+                  (c.codser LIKE '2%'  OR c.nome LIKE '%RETIRADA%')
                   ORDER BY a.dtexec ASC");
     }
     $ok = oci_execute($sql_comissao);
@@ -96,7 +98,7 @@
       }else{
         $resultado[0] = "$resultado[0]-HFC";
       }
-      if($tipo != "Assistência" and $resultado[9] == null ) //SEM APARTAMENTO
+      if($tipo != "assistencia" and $resultado[9] == null ) //SEM APARTAMENTO
       {
         if(strpos($resultado[0],"CONEXAO PONTO ADICIONAL") !== FALSE)
         {
@@ -267,7 +269,7 @@
           }
         }
       }//FIM TIPO ASSISTENCIA
-      elseif($tipo != "Assistência" and $resultado[9] != null)
+      elseif($tipo != "assistencia" and $resultado[9] != null)
       {
         if(strpos($resultado[0],"CONEXAO PONTO ADICIONAL") !== FALSE)
         {

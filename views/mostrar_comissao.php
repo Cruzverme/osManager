@@ -11,9 +11,9 @@
 
   switch($tipo)
   {
-    case 'assistencia': $labelTipo = 'Assistência';
-    case 'instalacao': $labelTipo = 'Instalação';
-    case 'desconexao': $labelTipo = 'Desconexão';
+    case 'assistencia': $labelTipo = 'Assistência';break;
+    case 'instalacao': $labelTipo = 'Instalação';break;
+    case 'desconexao': $labelTipo = 'Desconexão';break;
 
   } 
 ?>
