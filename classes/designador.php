@@ -40,11 +40,9 @@
       $response["success"] = 0;
       $response["message"] = "Campo Faltando!";
       echo $_SESSION['menssagem'] = "$response[message]";
-      //header('Location: ../views/cadastrar_os.php');
-      var_dump($nome);
-      var_dump($os);
+      header('Location: ../views/cadastrar_os.php');
       mysqli_close($conectar);
-      //exit;
+      exit;
     }
   }else{
     $response["success"] = 0;
