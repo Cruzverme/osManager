@@ -17,10 +17,14 @@ echo "
     <link href='../assets/bootstrap3/css/style.css' rel=stylesheet>
     
     <link rel='stylesheet' href='../assets/css/datepicker3.css'/>
+    <link href='../assets/css/transfer.css' rel='stylesheet' id='transfer-css'>
 
     <script src='../assets/bootstrap3/js/jquery.js'></script>
     <script src='../assets/bootstrap3/js/bootstrap.min.js'></script>
     <script src='../assets/js/bootbox.min.js'></script>
+    <script src='../assets/js/transfer.js'></script>
+
+    
   </head>
 ";
 

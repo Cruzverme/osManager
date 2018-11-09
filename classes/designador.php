@@ -6,49 +6,45 @@
   if (!mysqli_connect_errno())
   {
     $nome = filter_input(INPUT_POST,"tecnico");
-    $os = filter_input(INPUT_POST,"os_diaria");
-    
+    $os = filter_input(INPUT_POST,"os_diaria",FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
+
     if( $nome && $os )
     {
-      $ordemServico = explode(PHP_EOL,$os);
-
-      foreach($ordemServico as $ordem)
+      foreach($os as $ordemServico)
       {
-        if($ordem != 0)
+        echo "$ordemServico <br>";
+        if($ordemServico != 0)
         {
-            $sql_query=("INSERT INTO os(numero_os,tecnico) VALUES ('$ordem','$nome')");
-            $result = mysqli_query($conectar,$sql_query);
+          $sql_query=("INSERT INTO os(numero_os,tecnico) VALUES ('$ordemServico','$nome')");
+          $result = mysqli_query($conectar,$sql_query);
         }
       }
-
       if ($result)
       {
-          $response["success"] = 1;
-          $response["message"] = "OS Designada!";
-          echo $_SESSION['menssagem'] = "$response[message]";
-          header('Location: ../views/cadastrar_os.php');
-          mysqli_close($conectar);
-          exit;
+        $response["success"] = 1;
+        $response["message"] = "OS Designada!";
+        echo $_SESSION['menssagem'] = "$response[message]";
+        header('Location: ../views/cadastrar_os.php');
+        mysqli_close($conectar);
+        exit;
       }else
       {
-          $response["success"] = 0;
-          $response["message"] = "Nao foi designar!";
-          echo $_SESSION['menssagem'] = "$response[message]";
-          header('Location: ../views/cadastrar_os.php');
-          mysqli_close($conectar);
-          exit;
-      }
-    }
-    else
-    {
         $response["success"] = 0;
-        $response["message"] = "Campo Faltando!";
+        $response["message"] = "Nao foi designar!";
         echo $_SESSION['menssagem'] = "$response[message]";
-        //header('Location: ../views/cadastrar_os.php');
-        var_dump($nome);
-        var_dump($os);
+        header('Location: ../views/cadastrar_os.php');
         mysqli_close($conectar);
-        //exit;
+        exit;
+      }
+    }else{
+      $response["success"] = 0;
+      $response["message"] = "Campo Faltando!";
+      echo $_SESSION['menssagem'] = "$response[message]";
+      //header('Location: ../views/cadastrar_os.php');
+      var_dump($nome);
+      var_dump($os);
+      mysqli_close($conectar);
+      //exit;
     }
   }else{
     $response["success"] = 0;

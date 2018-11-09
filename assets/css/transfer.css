@@ -1,0 +1,18 @@
+.dual-list .list-group {
+  margin-top: 8px;
+  max-height: 300px;
+  overflow:scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.list-left li, .list-right li {
+  cursor: pointer;
+}
+
+.list-arrows {
+  padding-top: 100px;
+}
+
+.list-arrows button {
+    margin-bottom: 20px;
+}
