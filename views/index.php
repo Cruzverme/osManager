@@ -191,7 +191,7 @@
                   <span class='badge badge-pill badge-dark'>Total</span>
                 </h4>
                 <?php
-                  $sql= " SELECT COUNT(o.ordemServico),u.nome FROM ordensservicos o 
+                  $sql= " SELECT COUNT(o.ordemServico),u.nome FROM ordensServicos o 
                             INNER JOIN users u ON u.nome = o.tecnico
                             WHERE u.nome = o.tecnico
                             GROUP BY o.tecnico
@@ -200,7 +200,7 @@
                 
                   while($totalOS = mysqli_fetch_array($execQuery,MYSQLI_NUM))
                   {
-                    $sqlExecutada= "SELECT COUNT(o.ordemServico),u.nome FROM ordensservicos o 
+                    $sqlExecutada= "SELECT COUNT(o.ordemServico),u.nome FROM ordensServicos o 
                             INNER JOIN users u ON u.nome = '$totalOS[1]'
                             WHERE u.nome = o.tecnico AND o.status = 1
                         ";
@@ -208,7 +208,7 @@
                     
                     while($osRealizada = mysqli_fetch_array($execQueryExecutadas,MYSQLI_BOTH))
                     {
-                      $sqlCanceladas= "SELECT COUNT(o.ordemServico),u.nome FROM ordensservicos o 
+                      $sqlCanceladas= "SELECT COUNT(o.ordemServico),u.nome FROM ordensServicos o 
                             INNER JOIN users u ON u.nome = '$totalOS[1]'
                             WHERE u.nome = o.tecnico AND o.status = 2
                         ";
@@ -237,7 +237,7 @@
             <div class="panel-body">
               <ul class='list-group'>
                 <?php 
-                  $sqlOrdens = "SELECT ordemServico,tecnico,status,diaExecutado FROM ordensservicos  
+                  $sqlOrdens = "SELECT ordemServico,tecnico,status,diaExecutado FROM ordensServicos  
                                 ORDER BY diaExecutado DESC LIMIT 10";
 
                   $execOrdens = mysqli_query($conectar,$sqlOrdens);
