@@ -181,7 +181,7 @@
         </div> -->
 
         <div class='col-md-6'>
-          <div class="panel panel-primary">
+          <div class="panel panel-success">
             <div class="panel-heading">Quantidade de OS</div>
             <div class="panel-body">
               <ul class=list-group>
@@ -191,8 +191,6 @@
                   <span class='badge badge-pill badge-dark'>Total</span>
                 </h4>
                 <?php
-                  //print_r($osRealizada); 
-
                   $sql= " SELECT COUNT(o.ordemServico),u.nome FROM ordensservicos o 
                             INNER JOIN users u ON u.nome = o.tecnico
                             WHERE u.nome = o.tecnico
@@ -236,7 +234,34 @@
         <div class='col-md-6'>
           <div class="panel panel-info">
             <div class="panel-heading">Ultimas Ordens</div>
-            <div class="panel-body"></div>
+            <div class="panel-body">
+              <ul class='list-group'>
+                <?php 
+                  $sqlOrdens = "SELECT ordemServico,tecnico,status,diaExecutado FROM ordensservicos  
+                                ORDER BY diaExecutado DESC LIMIT 10";
+
+                  $execOrdens = mysqli_query($conectar,$sqlOrdens);
+
+                  while($ordensServ = mysqli_fetch_array($execOrdens,MYSQLI_NUM))
+                  {
+                    echo "<li class='list-group-item'>
+                      <strong>OS:</strong> $ordensServ[0]  <strong>Técnico:</strong> $ordensServ[1] <strong>Data:</strong> $ordensServ[3] ";
+                      if($ordensServ[2] == 0) 
+                        echo "<span class='badge badge-pill badge-dark' > PENDENTE</span>";
+                      elseif($ordensServ[2] == 1)
+                        echo "<span class='badge badge-pill badge-success' > CONCLUIDA</span>";
+                      else
+                        echo "<span class='badge badge-pill badge-danger' > CANCELADA</span>";
+                       
+                    
+                    echo"</li>";
+                  }
+
+                  
+                
+                ?>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
