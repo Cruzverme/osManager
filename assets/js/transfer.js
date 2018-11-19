@@ -1,6 +1,6 @@
 $(function()
 {
-  $('body').on('click', '.list-group .list-group-item', function () {
+  $('body').on('click', '.ordensservicolista .list-group-item', function () {
     $(this).toggleClass('active');
   });
   

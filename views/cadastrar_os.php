@@ -74,7 +74,7 @@
               </div>
             </div>
             
-            <ul class="list-group" >
+            <ul class="list-group ordensservicolista" >
               
             </ul>
 

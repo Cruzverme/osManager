@@ -43,7 +43,7 @@
         $sql = "UPDATE system_user SET data_login = '{$date->format('Y-m-d H:i:s')}' WHERE id = $usuario_id";
         mysqli_query($conectar,$sql);
 
-        header('Location: ../views/os_ativa.php');
+        header('Location: ../views/');
         mysqli_close($conectar);
         exit;
       }

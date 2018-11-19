@@ -5,3 +5,19 @@ body {
 .row-check{
   margin-left: 40px;
 }
+
+.badge-success{
+  background-color: darkgreen;
+}
+
+.badge-dark{
+  background-color: black;
+}
+
+.badge-danger{
+  background-color: darkred
+}
+
+.ajustado{
+  padding-right: 12px;
+}
