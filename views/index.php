@@ -194,7 +194,7 @@
                   $sql= " SELECT COUNT(o.ordemServico),u.nome FROM ordensServicos o 
                             INNER JOIN users u ON u.nome = o.tecnico
                             WHERE u.nome = o.tecnico
-                            GROUP BY o.tecnico
+                            GROUP BY o.tecnico,u.nome
                         ";
                   $execQuery = mysqli_query($conectar,$sql);
                 
