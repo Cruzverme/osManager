@@ -195,6 +195,64 @@ function alterarSituacaoOrdem(ordem,contrato,tecnico,tipo)
 	});
 }
 
+//######### DATA DE OS PARA DESIGNAR ###########
+
+function definirDataOS()
+{
+	var modal = bootbox.dialog({
+		message: $(".form-content").html(),
+		title: "Qual dia das OSs?",
+		buttons:[
+			{
+				label: "Buscar",
+				className: "btn btn-primary pull-left",
+				callback: function()
+				{
+					var form = modal.find(".form");
+					
+					var items = form.serialize();
+					console.log(items);
+					// $.ajax({
+					// 	url: "../views/cadastrar_os.php",
+					// 	type: "POST",
+					// 	data:{
+					// 		calendario: items
+					// 	},
+					// 	success: function(response){
+					// 		console.log('tex');
+					// 		window.location = "../views/cadastrar_os.php";
+					// 		items.submit();
+					// 		// if(response.succesFlag){
+					// 		// 	window.location.replace("../views/cadastrar_os.php");
+					// 		// 	//window.location = "../views/cadastrar_os.php";
+					// 		// 	items.submit();
+					// 		// }
+					// 	}
+					// });
+					$.get("../views/cadastrar_os.php",{calendario: items}).done(function(){
+						
+						window.location.replace("../views/cadastrar_os.php?calendario="+items);
+					}).fail(function(){
+						alert('faiou!');
+					});
+				}
+			},
+			{
+				label: "Fechar",
+				className: "btn btn-default pull-left",
+				callback: function() {
+					console.log("Fechado");
+				}
+			}
+		],
+		show: false,
+		onEscape: function() {
+			modal.modal("hide")
+		}
+	});
+	modal.modal("show");
+}
+
 // ########## USUARIO #################
 
 function removerUsuario(id_usuario)

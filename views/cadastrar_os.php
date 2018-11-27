@@ -1,6 +1,10 @@
 <?php 
   include "../config/db.php";
   include "../classes/header.php";
+  include "../classes/funcoes.php";
+
+  $data = filter_input(INPUT_GET,'calendario');
+  $dataCorreta = str_replace("start=",'',$data);
 ?>
 
 <body>
@@ -22,7 +26,7 @@
     $sql_nome = ("SELECT nome,id FROM users");
     $ordens = mysqli_query($conectar,$sql_nome);
 
-    $sql_os = "SELECT ordemServico FROM ordensservicos";
+    $sql_os = "SELECT ordemServico FROM ordensservicos WHERE diaExecutado LIKE '$dataCorreta%' ";
     $listaOS = mysqli_query($conectar,$sql_os);
   ?>
 
@@ -30,7 +34,7 @@
     <h3 class="page-header">Designar Ordem de Serviço</h3>
   </div>
 
-  <form action="../classes/designador.php" method="post" enctype="multipart/form-data" novalidate="novalidate" accept-charset="UTF-8"> 
+  <form action="../classes/designador.php" method="post" enctype="multipart/form-data" novalidate="novalidate" accept-charset="UTF-8">
     <div class="row">
       <div class="form-group col-md-12">
         <div class="form-group col-md-2">
@@ -148,3 +152,14 @@
 </body>
 
 <?php include "../classes/footer.php";?>
+
+<!-- MODAL -->
+<!--  <div class="form-content" style="display:none;">
+    <form class="form" role="form">
+      <div class="form-group">
+        <div class="form-group input-group input-daterange">
+          <input type="text" id="periodo" class="input-sm form-control" name="start"/>
+        </div>
+      </div>
+    </form>
+  </div> -->
