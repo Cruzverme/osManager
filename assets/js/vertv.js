@@ -198,7 +198,7 @@ function alterarSituacaoOrdem(ordem,contrato,tecnico,tipo)
 //######### DATA DE OS PARA DESIGNAR ###########
 
 function definirDataOS()
-{
+{	
 	var modal = bootbox.dialog({
 		message: $(".form-content").html(),
 		title: "Qual dia das OSs?",
@@ -212,25 +212,8 @@ function definirDataOS()
 					
 					var items = form.serialize();
 					console.log(items);
-					// $.ajax({
-					// 	url: "../views/cadastrar_os.php",
-					// 	type: "POST",
-					// 	data:{
-					// 		calendario: items
-					// 	},
-					// 	success: function(response){
-					// 		console.log('tex');
-					// 		window.location = "../views/cadastrar_os.php";
-					// 		items.submit();
-					// 		// if(response.succesFlag){
-					// 		// 	window.location.replace("../views/cadastrar_os.php");
-					// 		// 	//window.location = "../views/cadastrar_os.php";
-					// 		// 	items.submit();
-					// 		// }
-					// 	}
-					// });
-					$.get("../views/cadastrar_os.php",{calendario: items}).done(function(){
-						
+					
+					$.get("../views/cadastrar_os.php",{calendario: items}).done(function(){	
 						window.location.replace("../views/cadastrar_os.php?calendario="+items);
 					}).fail(function(){
 						alert('faiou!');

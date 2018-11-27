@@ -2,7 +2,7 @@
   include "../config/db.php";
   include "../classes/header.php";
   include "../classes/funcoes.php";
-  //verificaStatusOS();  
+  verificaStatusOS();  
 ?>
 
   <body>
@@ -37,9 +37,9 @@
           </div>
         </div>
     
+
         <div class="col-md-3">
-            <!-- <a href="cadastrar_os.php" class="btn btn-primary pull-right h2">Desginar OS</a> -->
-            <button class="btn btn-primary pull-right h2" onClick=definirDataOS();>Designar OS</button>
+          <button class="btn btn-primary pull-right h2" onClick=definirDataOS();>Designar OS</button>
         </div>
       </div> <!-- /#top -->
       <?php ?>
@@ -162,11 +162,13 @@
   </body>
 
 <!-- MODAL -->
-<div class="form-content" style="display:none;">
+  <div class="form-content" style="display:none;">
     <form class="form" role="form">
-      <div class="form-group">
-        <div class="form-group input-group input-daterange">
-          <input type="text" id="periodo" class="input-sm form-control" name="start" />
+      <div id="myModal" class="form-group">
+        <div class="modal-body form-group input-group input-daterange calendarioList">
+          <input type="date" id="periodo" class="input-sm form-control" name="start" />
+            <span class="input-group-addon">Até</span>
+          <input type="date" class="input-sm form-control" name="end" />
         </div>
       </div>
     </form>

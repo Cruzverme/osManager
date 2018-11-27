@@ -4,7 +4,9 @@
   include "../classes/funcoes.php";
 
   $data = filter_input(INPUT_GET,'calendario');
-  $dataCorreta = str_replace("start=",'',$data);
+  $dataInicial = str_replace("start=",'',$data);
+  $dataFinal = filter_input(INPUT_GET,'end');
+  
 ?>
 
 <body>
@@ -26,7 +28,7 @@
     $sql_nome = ("SELECT nome,id FROM users");
     $ordens = mysqli_query($conectar,$sql_nome);
 
-    $sql_os = "SELECT ordemServico FROM ordensservicos WHERE diaExecutado LIKE '$dataCorreta%' ";
+    $sql_os = "SELECT ordemServico FROM ordensservicos WHERE diaExecutado BETWEEN '$dataInicial%' AND '$dataFinal' ";
     $listaOS = mysqli_query($conectar,$sql_os);
   ?>
 
@@ -152,14 +154,3 @@
 </body>
 
 <?php include "../classes/footer.php";?>
-
-<!-- MODAL -->
-<!--  <div class="form-content" style="display:none;">
-    <form class="form" role="form">
-      <div class="form-group">
-        <div class="form-group input-group input-daterange">
-          <input type="text" id="periodo" class="input-sm form-control" name="start"/>
-        </div>
-      </div>
-    </form>
-  </div> -->
