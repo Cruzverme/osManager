@@ -191,7 +191,7 @@
                   <span class='badge badge-pill badge-dark'>Total</span>
                 </h4>
                 <?php
-                  $sql= " SELECT COUNT(o.ordemServico),u.nome FROM ordensServicos o 
+                  $sql= " SELECT COUNT(o.numero_os),u.nome FROM os o 
                             INNER JOIN users u ON u.nome = o.tecnico
                             WHERE u.nome = o.tecnico
                             GROUP BY o.tecnico,u.nome

@@ -10,7 +10,7 @@ echo "
         <span class=icon-bar></span>
         <span class=icon-bar></span>
       </button>
-      <a class='navbar-brand' href=#>Gerenciador de Ordem de Serviço</a>
+      <a class='navbar-brand' href=../views/index.php>Gerenciador de Ordem de Serviço</a>
     </div>
     <div id='navbar' class='navbar-collapse collapse'>
       <ul class='nav navbar-nav navbar-right'>

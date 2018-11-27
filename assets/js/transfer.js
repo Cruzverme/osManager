@@ -1,30 +1,87 @@
 $(function()
-{
+{ 
+  
   $('body').on('click', '.ordensservicolista .list-group-item', function () {
-    $(this).toggleClass('active');
+    
+    active = '';
+    active = $('ul li.active');
+
+    var key = Object.keys(active);
+    var len = key.length -2;
+
+    if(len == 0)
+      $(this).toggleClass('active');
+    
+    else
+      $(this).removeClass('active')
   });
   
+  var quantidadeOS = 0;
   $('.list-arrows button').click(function () {
     var $button = $(this), actives = '';
     if ($button.hasClass('move-left')) {
-        actives = $('.list-right ul li.active');
-        actives.clone().appendTo('.list-left ul');
-        actives.remove();
+      
+      actives = $('.list-right ul li.active');
+      var $lista =$('.list-left ul');
+      $boxINPUT = $('.list-right ul li.active #listaOSEscondido ');
+      valor = $boxINPUT.attr('name');
+
+      actives.removeClass('active');
+
+      if(valor == 'os_diaria[]')
+      {
+        if(actives.val() != $boxINPUT.val())
+        {
+          $boxINPUT.remove();
+          actives.remove();
+          $lista.append('<li class="list-group-item" value='+$boxINPUT.val()+'><input type=hidden id=listaOSEscondido name="" value='+$boxINPUT.val()+'>'+$boxINPUT.val()+'</li>');
+          $lista = '';
+          quantidadeOS-=1;
+          var totalDiario = parseInt($("#quantidadeOSTotalDiaria").text());
+          
+          quantidadeTotal = totalDiario + 1;
+          
+          $("#quantidadeOSTotalDiaria").text(quantidadeTotal);
+          $("#quantidadeOSDiaria").text(quantidadeOS);
+        }
+      }
     } else if ($button.hasClass('move-right')) {
-        actives = $('.list-left ul li.active');
-        actives.clone().appendTo('.list-right ul');
-        actives.remove();
+      
+      actives = $('.list-left ul li.active');
+      var $lista =$('.list-right ul');
+      $boxINPUT = $('.list-left ul li.active #listaOSEscondido ');
+      valor = $boxINPUT.attr('name');
+
+      actives.removeClass('active');
+      
+      if(valor == '')
+      {
+        if(actives.val() == $boxINPUT.val())
+        {
+          $boxINPUT.remove();
+          actives.remove();
+          $lista.append('<li class="list-group-item" val=""><input type=hidden id=listaOSEscondido name="os_diaria[]" value='+$boxINPUT.val()+'>'+$boxINPUT.val()+'</li>');
+          $lista = '';
+          quantidadeOS+=1
+          var totalDiario = $("#quantidadeOSTotalDiaria").text();
+
+          quantidadeTotal = totalDiario - 1;
+          
+          $("#quantidadeOSTotalDiaria").text(quantidadeTotal);
+          $("#quantidadeOSDiaria").text(quantidadeOS);
+        } 
+      }      
     }
   });
 
   $('.dual-list .selector').click(function () {
     var $checkBox = $(this);
     if (!$checkBox.hasClass('selected')) {
-        $checkBox.addClass('selected').closest('.well').find('ul li:not(.active)').addClass('active');
-        $checkBox.children('i').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
+      $checkBox.addClass('selected').closest('.well').find('ul li:not(.active)').addClass('active');
+      $checkBox.children('i').removeClass('glyphicon-unchecked').addClass('glyphicon-check');
     } else {
-        $checkBox.removeClass('selected').closest('.well').find('ul li.active').removeClass('active');
-        $checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
+      $checkBox.removeClass('selected').closest('.well').find('ul li.active').removeClass('active');
+      $checkBox.children('i').removeClass('glyphicon-check').addClass('glyphicon-unchecked');
     }
   });
 

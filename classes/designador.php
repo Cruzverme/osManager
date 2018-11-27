@@ -7,7 +7,7 @@
   {
     $nome = filter_input(INPUT_POST,"tecnico");
     $os = filter_input(INPUT_POST,"os_diaria",FILTER_SANITIZE_STRING, FILTER_REQUIRE_ARRAY);
-
+    
     if( $nome && $os )
     {
       foreach($os as $ordemServico)
@@ -22,7 +22,8 @@
       if ($result)
       {
         $response["success"] = 1;
-        $response["message"] = "OS Designada!";
+        $quantidadeOS = sizeof($os);
+        $response["message"] = "$quantidadeOS OS Designadas!";
         echo $_SESSION['menssagem'] = "$response[message]";
         header('Location: ../views/cadastrar_os.php');
         mysqli_close($conectar);
