@@ -2,11 +2,19 @@
   include "../config/db.php";
   include "../classes/header.php";
   include "../classes/funcoes.php";
+  include "../config/db_oracle.php";
 
   $data = filter_input(INPUT_GET,'calendario');
   $dataInicial = str_replace("start=",'',$data);
-  $dataFinal = filter_input(INPUT_GET,'end');
+  $dataFinalBruto = filter_input(INPUT_GET,'end');
+  list($anoI,$mesI,$diaI) = explode('-',$dataInicial);
+  list($anoF,$mesF,$diaF) = explode('-',$dataFinalBruto);
   
+  $dataInicial = "$diaI/$mesI/$anoI";
+  $dataFinal = "$diaF/$mesF/$anoF";
+  $dataInicial = converteData($dataInicial);
+  $dataFinal = converteData($dataFinal);
+ 
 ?>
 
 <body>
@@ -28,8 +36,20 @@
     $sql_nome = ("SELECT nome,id FROM users");
     $ordens = mysqli_query($conectar,$sql_nome);
 
-    $sql_os = "SELECT ordemServico FROM ordensservicos WHERE diaExecutado BETWEEN '$dataInicial%' AND '$dataFinal' ";
-    $listaOS = mysqli_query($conectar,$sql_os);
+    $sql_os ="select * from cplus.tva1700 WHERE DTAGEN IS NOT NULL AND DTEXEC IS NULL AND PERIODO = 1 AND DTAGEN BETWEEN '$dataInicial' AND '$dataFinal' AND codser LIKE '3%' AND OBSER1 NOT LIKE '%CORTE%' AND status = 'A' ";
+    $listaOS = oci_parse($conn,$sql_os);
+    oci_execute($listaOS);
+
+    // OSs Inseridas no SIStema
+    $sql_os_sistema = "SELECT numero_os,tecnico FROM os WHERE os_concluida = 0";
+    $ordemInseridaNoSistema = mysqli_query($conectar,$sql_os_sistema);
+    
+    $osIncluida = array(); 
+    
+    while($resultado = mysqli_fetch_array($ordemInseridaNoSistema))
+    {
+      array_push($osIncluida,"$resultado[numero_os]");      
+    }
   ?>
 
   <div id="main" class="container-fluid">
@@ -37,6 +57,9 @@
   </div>
 
   <form action="../classes/designador.php" method="post" enctype="multipart/form-data" novalidate="novalidate" accept-charset="UTF-8">
+    <input type=hidden name=dataInicial value=<?php echo $data; ?>></input>
+    <input type=hidden name=dataFinal value=<?php echo $dataFinalBruto; ?>></input>
+
     <div class="row">
       <div class="form-group col-md-12">
         <div class="form-group col-md-2">
@@ -77,13 +100,17 @@
             </div>
             <ul class="list-group ordensservicolista">
               <?php 
-                  $qtdOS = mysqli_num_rows($listaOS);
-                  while( $row = mysqli_fetch_array($listaOS)) 
+                  $qtdOS = 0;
+                  while( $row = oci_fetch_array($listaOS,OCI_BOTH)) 
                   { 
-                    if($row[0] != NULL)
+                    if(in_array($row['OS'],$osIncluida,true) == false)
+                    {
+                      $qtdOS++;
+                        
                       echo "
-                        <li class='list-group-item' value=$row[0]><input id=listaOSEscondido type=hidden  name='' value='$row[0]'>$row[0]</li>
+                        <li class='list-group-item' value=$row[OS]><input id=listaOSEscondido type=hidden  name='' value='$row[OS]'>$row[OS]</li>
                       ";
+                    }
                   }
               ?>  
             </ul>
@@ -150,7 +177,6 @@
     </div>
   </form> 
   
-
 </body>
 
 <?php include "../classes/footer.php";?>

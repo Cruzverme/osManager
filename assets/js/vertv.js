@@ -216,7 +216,7 @@ function definirDataOS()
 					$.get("../views/cadastrar_os.php",{calendario: items}).done(function(){	
 						window.location.replace("../views/cadastrar_os.php?calendario="+items);
 					}).fail(function(){
-						alert('faiou!');
+						alert('Ocorreu um Erro Desconhecido!!');
 					});
 				}
 			},
