@@ -166,9 +166,16 @@
     <form class="form" role="form">
       <div id="myModal" class="form-group">
         <div class="modal-body form-group input-group input-daterange calendarioList">
-          <input type="date" id="periodo" class="input-sm form-control" name="start" />
+          <input type="date" class="input-sm form-control" name="start" />
             <span class="input-group-addon">Até</span>
           <input type="date" class="input-sm form-control" name="end" />
+        </div>
+        <div>
+          <select class="form-control" name="periodo">
+            <option selected>Escolha o Horário</option>
+            <option value="1">Diurno</option>
+            <option value="2">Noturno</option>
+          </select>
         </div>
       </div>
     </form>

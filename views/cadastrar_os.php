@@ -4,6 +4,7 @@
   include "../classes/funcoes.php";
   include "../config/db_oracle.php";
 
+  $periodo = filter_input(INPUT_GET,'periodo');
   $data = filter_input(INPUT_GET,'calendario');
   $dataInicial = str_replace("start=",'',$data);
   $dataFinalBruto = filter_input(INPUT_GET,'end');
@@ -14,6 +15,7 @@
   $dataFinal = "$diaF/$mesF/$anoF";
   $dataInicial = converteData($dataInicial);
   $dataFinal = converteData($dataFinal);
+  
  
 ?>
 
@@ -36,7 +38,7 @@
     $sql_nome = ("SELECT nome,id FROM users");
     $ordens = mysqli_query($conectar,$sql_nome);
 
-    $sql_os ="select * from cplus.tva1700 WHERE DTAGEN IS NOT NULL AND DTEXEC IS NULL AND PERIODO = 1 AND DTAGEN BETWEEN '$dataInicial' AND '$dataFinal' AND codser LIKE '3%' AND OBSER1 NOT LIKE '%CORTE%' AND status = 'A' ";
+    $sql_os ="select * from cplus.tva1700 WHERE DTAGEN IS NOT NULL AND DTEXEC IS NULL AND PERIODO = $periodo AND DTAGEN BETWEEN '$dataInicial' AND '$dataFinal' AND codser LIKE '3%' AND OBSER1 NOT LIKE '%CORTE%' AND status = 'A' ";
     $listaOS = oci_parse($conn,$sql_os);
     oci_execute($listaOS);
 
