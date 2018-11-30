@@ -23,6 +23,7 @@ echo "
     <script src='../assets/bootstrap3/js/bootstrap.min.js'></script>
     <script src='../assets/js/bootbox.min.js'></script>
     <script src='../assets/js/transfer.js'></script>
+    
 
     
   </head>

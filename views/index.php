@@ -40,7 +40,7 @@
     return $posicao;
   }
 
-  $sqlTec = "select usuario FROM users";
+  $sqlTec = "select nome FROM users";
   $execNome = mysqli_query($conectar,$sqlTec);
 
   $classificacao = 0;
@@ -62,125 +62,35 @@
     
     <div class="row justify-content-start">
       <div class="panel-group">
-        <!-- <div class='col-md-4'>
+        <div class='col-md-4'>
           <div class="panel panel-warning">
-            <div class="panel-heading"><span class='glyphicon glyphicon-stats'></span> RANKING </div>
+            <div class="panel-heading"> OS Pendente de Execução </div>
             <div class="panel-body">
               <ul class=list-group>
-                </*?php
-
-                  $list = array();
-                  $posicao = array('primeiro' =>0, 'segundo'=> 0, 'terceiro' => 0,'quarto'=> 0, 'quinto'=> 0);
-                  
-                  $sql= " SELECT COUNT(o.ordemServico),u.nome FROM ordensservicos o 
-                            INNER JOIN users u ON u.nome = o.tecnico
-                            WHERE u.nome = o.tecnico AND o.status = 1
-                            GROUP BY o.tecnico
-                        ";
-                  $execQuery = mysqli_query($conectar,$sql);
-                    
-                  while($row = mysqli_fetch_array($execQuery,MYSQLI_NUM))
-                  {
-                    
-                    echo "VALOR $row[0] TECNICO $row[1]<br>";
-
-                    if( $row[0] > $posicao['primeiro']['numero_os'])
-                    {      
-                      if($posicao['primeiro']['numero_os'] != 0)
+                <form role="form" method="post"></form>
+                <p>
+                  <select id="seletor_tecnico_os" class='form-control' name="nome_tecnico">
+                    <option>Escolha o Técnico</option>
+                    <?php 
+                      while($rowTec = mysqli_fetch_array($execNome,MYSQLI_NUM))
                       {
-                        $valorAtual = $posicao['primeiro']['numero_os'];
-                        $tecAtual = $posicao['primeiro']['tecnico'];
-                        $posicao['primeiro'] = array('tecnico'=>$row[1],'numero_os'=>$row[0]);
-                        $posicao = ajustar_array($posicao,$valorAtual,$tecAtual);
-                      }else{
-                        $posicao['primeiro'] = array('tecnico'=>$row[1],'numero_os'=>$row[0]);
-                      }
-                      // break;
-                    }elseif($row[0] > $posicao['segundo']['numero_os']  ){
-                      
-                      if($posicao['segundo']['numero_os'] != 0)
-                      {
-                        $valorAtual = $posicao['segundo']['numero_os'];
-                        $tecAtual = $posicao['segundo']['tecnico'];
-                        $posicao['segundo'] = array('tecnico'=>$row[1],'numero_os'=>$row[0]);
-                        $posicao = ajustar_array($posicao,$valorAtual,$tecAtual);
                         
-                      }else{
-                        $posicao['segundo'] = array('tecnico'=>$row[1],'numero_os'=>$row[0]);
+                        echo "<option value=$rowTec[0]>$rowTec[0]</option>";
                       }
-                      // break;
-                    }elseif($row[0] > $posicao['terceiro']['numero_os']){
-                      
-                      if($posicao['terceiro']['numero_os'] != 0)
-                      {
-                        $valorAtual = $posicao['terceiro']['numero_os'];
-                        $tecAtual = $posicao['terceiro']['tecnico'];
-                        $posicao['terceiro'] = array('tecnico'=>$row[1],'numero_os'=>$row[0]);
-                        $posicao = ajustar_array($posicao,$valorAtual,$tecAtual);
-                        
-                      }else{
-                        $posicao['terceiro'] = array('tecnico'=>$row[1],'numero_os'=>$row[0]);
-                      }
-                      // break;
-                    }elseif($row[0] > $posicao['quarto']['numero_os']){
-                      
-                      if($posicao['quarto']['numero_os'] != 0)
-                      {
-                        $valorAtual = $posicao['quarto']['numero_os'];
-                        $tecAtual = $posicao['quarto']['tecnico'];
-                        $posicao['quarto'] = array('tecnico'=>$row[1],'numero_os'=>$row[0]);
-                        $posicao = ajustar_array($posicao,$valorAtual,$tecAtual);
-                        
-                      }else{
-                        $posicao['quarto'] = array('tecnico'=>$row[1],'numero_os'=>$row[0]);
-                      }
-                      // break;
-                    }elseif($row[0] > $posicao['quinto']['numero_os']){
-                      
-                      if($posicao['quinto']['numero_os'] != 0)
-                      {
-                        $valorAtual = $posicao['quinto']['numero_os'];
-                        $tecAtual = $posicao['quinto']['tecnico'];
-                        $posicao['quinto'] = array('tecnico'=>$row[1],'numero_os'=>$row[0]);
-                        $posicao = ajustar_array($posicao,$valorAtual,$tecAtual);
-
-                      }else{
-                        $posicao['quinto'] = array('tecnico'=>$row[1],'numero_os'=>$row[0]);
-                      }
-                      // break;
-                    }            
-                  }
-                  
-                  
-                  foreach($posicao as $a)
-                  {
-                    $classificacao+=1;
+                    ?>
+                  </select>
+                </p>
+                <div>
+                  <ul class="list-group">
                     
-                    if($classificacao == 1)
-                    {
-                      $icon = "class='glyphicon glyphicon-king'";
-                      echo "<li class=list-group-item><h3><span $icon></span> $classificacao ª - $a[tecnico]-$a[numero_os] </h3></li>";
-                    }elseif($classificacao == 2)
-                    {
-                      $icon = "class='glyphicon glyphicon-queen'";
-                      echo "<li class=list-group-item><h4><span $icon></span> $classificacao ª - $a[tecnico]-$a[numero_os] </h4></li>";
-                    }elseif($classificacao == 3){
-                      $icon = "class='glyphicon glyphicon-bishop'";
-                      echo "<li class=list-group-item><h5><span $icon></span> $classificacao ª - $a[tecnico]-$a[numero_os] </h5></li>";
-                    }else{
-                      $icon = "class='glyphicon glyphicon-pawn'";
-                      echo "<li class=list-group-item><h6><span $icon></span> $classificacao ª - $a[tecnico]-$a[numero_os] </h6></li>";
-                    }
-
-                    
-                  }  
-                ?*/>
+                  </ul>
+                </div>
               </ul>
             </div>
           </div>
-        </div> -->
+        </div>
 
-        <div class='col-md-6'>
+        <div class='col-md-4'>
           <div class="panel panel-success">
             <div class="panel-heading">Quantidade de OS</div>
             <div class="panel-body">
@@ -231,7 +141,7 @@
           </div>
         </div>
 
-        <div class='col-md-6'>
+        <div class='col-md-4'>
           <div class="panel panel-info">
             <div class="panel-heading">Ultimas Ordens</div>
             <div class="panel-body">
@@ -265,8 +175,6 @@
           </div>
         </div>
       </div>
-      
-    
     </div>
   </div>
 </body>

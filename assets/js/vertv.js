@@ -416,15 +416,15 @@ function alterarNomeEquipe(id_equipe)
 					var items = form.serialize();
 					
 					$.post("../classes/alterarNomeEquipe.php",{novoNome: items, id_equipe: equipeID},function(msg_retorno){
-					 bootbox.alert({
-					 	title: "Alteração de Nome",
+					 	bootbox.alert({
+					 		title: "Alteração de Nome",
 					  		message: msg_retorno,
 					  		callback: function()
 					  		{
 									console.log(msg_retorno);
 									location.reload(true);
 					  		}
-					  	});
+						});
 					});
 				}
 			},
@@ -443,3 +443,15 @@ function alterarNomeEquipe(id_equipe)
 	});
 	modal.modal("show");
 }
+
+//######## INSERE LINHA TECNICO CONSULTAR DIARIO #########
+$("#seletor_tecnico_os").change(function(){
+	var nomeTecnico = $(this).val();
+	var listaInserida = $("ul .list-group");
+	var listaVal = $(".listaDoTecnico");
+	listaVal.remove();
+	
+	$.post("../classes/consultarOSTecnico.php",{nome: nomeTecnico},function(msg_retorno){
+		listaInserida.append(msg_retorno);
+	});
+});

@@ -13,6 +13,9 @@ echo "
   <script src='../assets/js/datepicker3.min.js'></script>
   
   <script src='../assets/js/vertv.js'></script>
+
+  <script src='../assets/js/transfer.js'></script>
+  
 </html>
 ";
 
