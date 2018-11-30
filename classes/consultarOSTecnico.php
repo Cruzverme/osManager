@@ -9,10 +9,10 @@
     // date_default_timezone_set('America/Sao_Paulo');
     // $date = date('Y-m-d');
 
-    $sql = "SELECT ordem.numero_os,ordem.data FROM os ordem
-            INNER JOIN ordensservicos ordemEnviada ON ordemEnviada.ordemServico != ordem.numero_os 
-            AND ordemEnviada.tecnico = ordem.tecnico
-            WHERE ordem.tecnico = '$nomeTecnico' AND ordem.numero_os != ordemEnviada.ordemServico";
+    $sql = " SELECT numero_os,ordem.data FROM os ordem 
+              WHERE NOT EXISTS(SELECT ordemServico, servico.tecnico 
+                                FROM ordensServicos servico
+                                WHERE servico.ordemServico = ordem.numero_os ) AND ordem.tecnico = '$nomeTecnico' ";
 
     $execQuery = mysqli_query($conectar,$sql);
     $numero = "";
