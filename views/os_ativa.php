@@ -31,7 +31,7 @@
           <div class="  form-group input-group h2">
             <span class="input-group-btn">
               <button class="btn btn-primary form-control" onClick="javascript:location.reload(true);">
-                <span class="">ATUALIZAR PAGINA</span>
+                <span class="">ATUALIZAR PÁGINA</span>
               </button>
             </span>
           </div>
