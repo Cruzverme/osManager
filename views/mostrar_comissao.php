@@ -87,8 +87,7 @@
                           WHERE a.contra = d.contra AND b.nome = '$equipe' AND b.codcid = a.codcid AND a.codequ = b.codequ 
                           AND a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal' AND a.codser = c.codser AND
                           (c.codser LIKE '2%'  OR c.nome LIKE '%RETIRADA%')
-                          ORDER BY a.dtexec ASC"
-                          );
+                          ORDER BY a.dtexec ASC");
             }
            $ok = oci_execute($sql_comissao);
           
