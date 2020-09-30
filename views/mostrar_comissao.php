@@ -84,7 +84,7 @@
             }else{
               $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, c.codser,a.codsere
                           FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d 
-                          WHERE a.contra = d.contra AND b.codcid = a.codcid AND b.nome = '$equipe' AND a.codequ = b.codequ 
+                          WHERE a.contra = d.contra AND b.nome = '$equipe' AND b.codcid = a.codcid AND a.codequ = b.codequ 
                           AND a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal' AND a.codser = c.codser AND
                           (c.codser LIKE '2%'  OR c.nome LIKE '%RETIRADA%')
                           ORDER BY a.dtexec ASC"
