@@ -90,7 +90,18 @@
         }
       }
     }
-  }  
+  }
+
+  function isMigration($frase)
+  {
+    $lista = ["MIGRAR", "MIGRACAO", "MIGRAÇÃO"];
+
+    foreach($lista as $palavra) {
+      if (strpos($frase, $palavra) !== false) {
+        return true;
+      }
+    }
+  }
 
 //  $ok = verificaStatusOS();
 //  $ok = verificarPontos(29431,561113);
