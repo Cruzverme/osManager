@@ -208,7 +208,7 @@
                             $valorComissao = 65.00 + ($qtdPontoSecundario * 20.00);
                         }
                     } elseif($qtdPontoPrincipal == 1 and $qtdPontoSecundario >=0) {
-                        $valorComissao= 65.86 + ($qtdPontoSecundario * 18.00);
+                        $valorComissao= 65.00 + ($qtdPontoSecundario * 18.00);
                         $desativado = "disabled";
 
                         if (sizeOf($clienteFibra) >= 1) {
