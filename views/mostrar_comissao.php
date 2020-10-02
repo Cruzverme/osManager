@@ -193,7 +193,28 @@
                       }
                     }
                 } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
-                    $valorComissao = 1500;
+                    if($qtdPontoPrincipal > 1 and $qtdPontoSecundario >= 0) {
+                        $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
+                        $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
+
+                        if($qtdPontoPrincipal !=1) {
+                            $qtdPontoPrincipal = 1;
+                        }
+
+                        $valorComissao = 65.00 + ($qtdPontoSecundario * 18.00);
+                        $desativado = "disabled";
+
+                        if (sizeOf($clienteFibra) >= 1) {
+                            $valorComissao = 65.00 + ($qtdPontoSecundario * 20.00);
+                        }
+                    } elseif($qtdPontoPrincipal == 1 and $qtdPontoSecundario >=0) {
+                        $valorComissao= 65.86 + ($qtdPontoSecundario * 18.00);
+                        $desativado = "disabled";
+
+                        if (sizeOf($clienteFibra) >= 1) {
+                            $valorComissao = 65.00 + ($qtdPontoSecundario * 20.00);
+                        }
+                    }
                 } elseif ($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0) {
                   $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
                   $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
@@ -305,7 +326,28 @@
                     }
                   }
                 } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
-                    $valorComissao = 2500;
+                    if($qtdPontoPrincipal > 1 and $qtdPontoSecundario >= 0) {
+                        $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
+                        $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
+
+                        if($qtdPontoPrincipal !=1) {
+                            $qtdPontoPrincipal = 1;
+                        }
+
+                        $valorComissao = 38.00 + ($qtdPontoSecundario * 18.00);
+                        $desativado = "disabled";
+
+                        if (sizeOf($clienteFibra) >= 1) {
+                            $valorComissao = 38.00 + ($qtdPontoSecundario * 20.00);
+                        }
+                    } elseif($qtdPontoPrincipal == 1 and $qtdPontoSecundario >=0) {
+                        $valorComissao= 38.00 + ($qtdPontoSecundario * 18.00);
+                        $desativado = "disabled";
+
+                        if (sizeOf($clienteFibra) >= 1) {
+                            $valorComissao = 38.00 + ($qtdPontoSecundario * 20.00);
+                        }
+                    }
                 } elseif($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0) { //se primeira conexao predio
                   $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
                   $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
