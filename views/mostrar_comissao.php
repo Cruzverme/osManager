@@ -67,6 +67,13 @@
             $dataInicial = converteData($dataInicial);
             $dataFinal = converteData($dataFinal);
 
+            $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, c.codser,a.codsere
+                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d 
+                          WHERE a.contra = d.contra AND b.nome = '$equipe' AND b.codcid = a.codcid AND a.codequ = b.codequ 
+                          AND a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal' AND a.codser = c.codser AND
+                          (c.codser LIKE '2%'  OR c.nome LIKE '%RETIRADA%')
+                          ORDER BY a.dtexec ASC");
+
             if($tipo == "assistencia")
             {
               $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
@@ -81,13 +88,6 @@
                           b.nome = '$equipe' AND b.codcid = a.codcid AND a.codequ = b.codequ AND a.codsere is not null  AND 
                           a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codcla = 1 
                           ORDER BY a.dtexec ASC");
-            }else{
-              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, c.codser,a.codsere
-                          FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d 
-                          WHERE a.contra = d.contra AND b.nome = '$equipe' AND b.codcid = a.codcid AND a.codequ = b.codequ 
-                          AND a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal' AND a.codser = c.codser AND
-                          (c.codser LIKE '2%'  OR c.nome LIKE '%RETIRADA%')
-                          ORDER BY a.dtexec ASC");
             }
            $ok = oci_execute($sql_comissao);
           
@@ -95,360 +95,264 @@
             $quantidade_OS = 0;
             while ($resultado = oci_fetch_array($sql_comissao, OCI_BOTH))
             {
+                $nomeServico = "$resultado[0]-HFC";;
+                $dataAgendamento = $resultado[1];
+                $dataExecucao = $resultado[2];
+                $nomeEquipe = $resultado[3];
+                $numeroOS = $resultado[4];
+                $numeroContrato = $resultado[5];
+                $valorComissao = $resultado[6];
+                $qtdPontoPrincipal = $resultado[7];
+                $qtdPontoSecundario = $resultado[8];
+                $numeroApto = $resultado[9];
+
               $desativado = "";
-              $clienteFibra = verificaPacote($resultado[5],$dataInicial,$dataFinal,$resultado[3]);
-              $pontosDoCliente = verificarPontos($resultado[5],$resultado[4]);
-              if(sizeOf($clienteFibra) >= 1)
-              {
-                $resultado[0] = "$resultado[0]-FTTH";
-              }else{
-                $resultado[0] = "$resultado[0]-HFC";
+              $clienteFibra = verificaPacote($numeroContrato,$dataInicial,$dataFinal,$nomeEquipe);
+              $pontosDoCliente = verificarPontos($numeroContrato,$numeroOS);
+
+              if(sizeOf($clienteFibra) >= 1) {
+                  $nomeServico = "$resultado[0]-FTTH";
               }
-              if(($tipo != "assistencia" AND $tipo != "desconexao") and $resultado[9] == null ) //SEM APARTAMENTO
-              {
-                if(strpos($resultado[0],"CONEXAO PONTO ADICIONAL") !== FALSE)
-                {
-                  if($resultado[7] > 1 AND $resultado[8] >=0)
-                  {
-                    $resultado[7] = $resultado[7] - 1;
-                    $resultado[8] = $resultado[8] + $resultado[7];
-                    if($resultado[7] !=1)
-                    {
-                      $resultado[7] = 1;
+
+              if (($tipo != "assistencia" AND $tipo != "desconexao") and $numeroApto == null ) { //SEM APARTAMENTO
+                if (strpos($nomeServico,"CONEXAO PONTO ADICIONAL") !== FALSE) {
+                  if ($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >=0) {
+                    $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
+                    $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
+
+                    if ($qtdPontoPrincipal !=1) {
+                      $qtdPontoPrincipal = 1;
                     }
-                    if(sizeOf($clienteFibra) >= 1)
-                    {
-                      $resultado[6] = 30.00 + ($resultado[8] * 20.00);//se for fibra o valor e esse
-                      $desativado = "disabled";
-                    }else{
-                      $resultado[6] = 26.56 + ($resultado[8] * 18.00);//se for hfc
-                      $desativado = "disabled";
+                    $valorComissao = 26.56 + ($qtdPontoSecundario * 18.00);//se for hfc
+                    $desativado = "disabled";
+
+                    if (sizeOf($clienteFibra) >= 1) {
+                      $valorComissao = 30.00 + ($qtdPontoSecundario * 20.00);//se for fibra o valor e esse
                     }
-                  }elseif($resultado[7] == 1 AND $resultado[8] >=0)
-                  {
-                    if(sizeOf($clienteFibra) >= 1)
-                    {
-                      $resultado[6] = 30.00 + ($resultado[8] * 20.00);//se for fibra o valor e esse
-                      $desativado = "disabled";
+                  }elseif ($qtdPontoPrincipal == 1 AND $qtdPontoSecundario >=0) {
+                    $valorComissao = 26.56 + ($qtdPontoSecundario * 18.00);
+                    $desativado = "disabled";
+
+                    if (sizeOf($clienteFibra) >= 1) {
+                      $valorComissao = 30.00 + ($qtdPontoSecundario * 20.00);//se for fibra o valor e esse
                     }
-                    else
-                    {
-                      $resultado[6] = 26.56 + ($resultado[8] * 18.00);
-                      $desativado = "disabled";
-                    }
-                  }elseif($resultado[7] < 1 AND $resultado[8] >=1) //;se for somente para instalar o ponto adicional.
-                  {
-                    if(sizeOf($clienteFibra) >= 1)
-                    {
-                      $resultado[6] = 30.00 + (($resultado[8] - 1) * 20.00);//diminui 1 porque 1 ponto tem o valor completo
-                      $desativado = "disabled";
-                    }
-                    else
-                    {
-                      $resultado[6] = 26.56 + (($resultado[8] - 1) * 18.00);
-                      $desativado = "disabled";
+                  }elseif ($qtdPontoPrincipal < 1 AND $qtdPontoSecundario >=1) { //;se for somente para instalar o ponto adicional.
+                    $valorComissao = 26.56 + (($qtdPontoSecundario - 1) * 18.00);
+                    $desativado = "disabled";
+
+                    if (sizeOf($clienteFibra) >= 1) {
+                      $valorComissao = 30.00 + (($qtdPontoSecundario - 1) * 20.00);//diminui 1 porque 1 ponto tem o valor completo
                     }
                   }
-                }elseif(strpos($resultado[0],"DESCONEXAO") !== FALSE )
-                {
-                    $resultado[6] = 25.00;
-                }
-                elseif(strpos($resultado[0],"TRANSFERENCIA") !== FALSE)
-                {
-                  if($resultado[7] > 1 AND $resultado[8] >= 0)
+                }elseif (strpos($nomeServico,"DESCONEXAO") !== FALSE ) {
+                    $valorComissao = 25.00;
+                } elseif (strpos($nomeServico,"TRANSFERENCIA") !== FALSE) {
+                  if($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0)
                   {
-                    $resultado[7] = $resultado[7] - 1;
-                    $resultado[8] = $resultado[8] + $resultado[7];
+                    $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
+                    $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
                     
-                    if($resultado[7] !=1)
-                    {
-                        $resultado[7] = 1;
+                    if ($qtdPontoPrincipal !=1) {
+                        $qtdPontoPrincipal = 1;
                     }
-                    if(sizeOf($clienteFibra) >= 1)
-                    {
-                      $resultado[6] = 80.00 + ($resultado[8] * 20.00);
-                      $desativado = "disabled";
-                    } 
-                    else
-                    { 
-                      $resultado[6] = 65.86 + ($resultado[8] * 18.00);
-                      $desativado = "disabled";
+                    $valorComissao = 65.86 + ($qtdPontoSecundario * 18.00);
+                    $desativado = "disabled";
+                    if (sizeOf($clienteFibra) >= 1) {
+                      $valorComissao = 80.00 + ($qtdPontoSecundario * 20.00);
                     }
-                  }elseif($resultado[7] == 1 AND $resultado[8] >=0)
-                  { 
-                    if(sizeOf($clienteFibra) >= 1)
-                    {
-                      $resultado[6] = 80.00 + ($resultado[8] * 20.00);
-                      $desativado = "disabled";
-                    }
-                    else
-                    {
-                      $resultado[6]= 65.86 + ($resultado[8] * 18.00 );
-                      $desativado = "disabled";
+                  } elseif ($qtdPontoPrincipal == 1 AND $qtdPontoSecundario >=0) {
+                    $valorComissao= 65.86 + ($qtdPontoSecundario * 18.00 );
+                    $desativado = "disabled";
+
+                    if (sizeOf($clienteFibra) >= 1) {
+                      $valorComissao = 80.00 + ($qtdPontoSecundario * 20.00);
                     }
                   }
                 }
-                elseif(strpos($resultado[0],"RECONEXAO") !== FALSE )
-                {
-                    if($resultado[7] > 1 AND $resultado[8] >= 0)
-                    {
-                      $resultado[7] = $resultado[7] - 1;
-                      $resultado[8] = $resultado[8] + $resultado[7];
-                      if($resultado[7] !=1)
-                      {
-                          $resultado[7] = 1;
+                elseif(strpos($nomeServico,"RECONEXAO") !== FALSE ) {
+                    if($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0) {
+                      $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
+                      $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
+
+                      if($qtdPontoPrincipal !=1) {
+                          $qtdPontoPrincipal = 1;
                       }
-                      if(sizeOf($clienteFibra) >= 1)
-                      {
-                        $resultado[6] = 80.00 + ($resultado[8] * 20.00);
-                        $desativado = "disabled";
+
+                      $valorComissao = 65.86 + ($qtdPontoSecundario * 18.00);
+                      $desativado = "disabled";
+
+                      if (sizeOf($clienteFibra) >= 1) {
+                        $valorComissao = 80.00 + ($qtdPontoSecundario * 20.00);
                       }
-                      else
-                      {
-                        $resultado[6] = 65.86 + ($resultado[8] * 18.00);
-                        $desativado = "disabled";
-                      }
-                    }
-                    elseif($resultado[7] == 1 AND $resultado[8] >=0)
-                    {
-                      if(sizeOf($clienteFibra) >= 1)
-                      {  
-                        $resultado[6] = 80.00 + ($resultado[8] * 20.00);
-                        $desativado = "disabled";
-                      }
-                      else
-                      {
-                        $resultado[6]= 65.86 + ($resultado[8] * 18.00);
-                        $desativado = "disabled";
+                    } elseif($qtdPontoPrincipal == 1 AND $qtdPontoSecundario >=0) {
+                      $valorComissao= 65.86 + ($qtdPontoSecundario * 18.00);
+                      $desativado = "disabled";
+
+                      if (sizeOf($clienteFibra) >= 1) {
+                        $valorComissao = 80.00 + ($qtdPontoSecundario * 20.00);
                       }
                     }
-                }
-                elseif($resultado[7] > 1 AND $resultado[8] >= 0)
-                {
-                  $resultado[7] = $resultado[7] - 1;
-                  $resultado[8] = $resultado[8] + $resultado[7];
+                } elseif ($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0) {
+                  $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
+                  $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
                   
-                  if($resultado[7] != 1)
-                  {
-                    $resultado[7] = 1;
+                  if ($qtdPontoPrincipal != 1) {
+                    $qtdPontoPrincipal = 1;
                   }
-                  if(sizeOf($clienteFibra) >= 1)
-                  {
-                    $resultado[6] = 80.00 + ($resultado[8] * 20.00);
-                    $desativado = "disabled";
+
+                  $valorComissao = 65.86 + ($qtdPontoSecundario * 18);
+                  $desativado = "disabled";
+
+                  if (sizeOf($clienteFibra) >= 1) {
+                    $valorComissao = 80.00 + ($qtdPontoSecundario * 20.00);
                   }
-                  else
-                  {
-                    $resultado[6] = 65.86 + ($resultado[8] * 18);
-                    $desativado = "disabled";
+                } elseif ($qtdPontoPrincipal == 1 AND sizeof($clienteFibra) >=1) {
+                  $valorComissao = 80.00;
+                  $desativado = "disabled";
+
+                  if ($qtdPontoSecundario >= 0) {
+                    $valorComissao = 80.00 + ($qtdPontoSecundario * 20.00);//se for predio
                   }
-                }
-                elseif($resultado[7] == 1 AND sizeof($clienteFibra) >=1)
-                {
-                  if($resultado[8] >= 0)
-                  {
-                    $resultado[6] = 80.00 + ($resultado[8] * 20.00);//se for predio
-                    $desativado = "disabled";
-                  }else{
-                    $resultado[6] = 80.00;
-                    $desativado = "disabled";
+                } elseif ($qtdPontoPrincipal == 0 AND sizeOf($clienteFibra)>=1) {
+                  $qtdPontoPrincipal = $pontosDoCliente[0];
+                  $qtdPontoSecundario = 0;
+
+                  $valorComissao = 80;
+                  $desativado = "disabled";
+
+                  if ($pontosDoCliente[0] > 1) {
+                    $qtdPontoPrincipal = 1;
+                    $qtdPontoSecundario = $pontosDoCliente[0] - $qtdPontoPrincipal;
                   }
-                }
-                elseif($resultado[7] == 0 AND sizeOf($clienteFibra)>=1)
-                {
-                  if($pontosDoCliente[0] > 1)
-                  {
-                    $resultado[7] = 1;
-                    $resultado[8] = $pontosDoCliente[0] - $resultado[7];
-                  }else{
-                    $resultado[7] = $pontosDoCliente[0];
-                    $resultado[8] = 0;
-                  }
-                  if($resultado[8] > 0)
-                  {
-                    $resultado[6] = 80 + ($resultado[8] * 20.00);
-                    $desativado = "disabled";
-                  }
-                  else{
-                    $resultado[6] = 80;
-                    $desativado = "disabled";
+
+                  if ($qtdPontoSecundario > 0) {
+                    $valorComissao = 80 + ($qtdPontoSecundario * 20.00);
                   }
                 }
               }//FIM TIPO ASSISTENCIA
-              elseif(($tipo != "assistencia" AND $tipo != "desconexao")and $resultado[9] != null)
-              {
-                if(strpos($resultado[0],"CONEXAO PONTO ADICIONAL") !== FALSE)
-                {
-                  if($resultado[7] > 1 AND $resultado[8] >=0)
-                  {
-                    $resultado[7] = $resultado[7] - 1;
-                    $resultado[8] = $resultado[8] + $resultado[7];
-                    if($resultado[7] !=1)
-                    {
-                      $resultado[7] = 1;
+              elseif (($tipo != "assistencia" AND $tipo != "desconexao")and $numeroApto != null) { // APARTAMENTOS
+                if (strpos($nomeServico,"CONEXAO PONTO ADICIONAL") !== FALSE) {
+                  if ($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >=0) {
+                    $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
+                    $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
+
+                    $valorComissao = 26.56 + ($qtdPontoSecundario * 18.00);
+                    $desativado = "disabled";
+
+                    if ($qtdPontoPrincipal != 1) {
+                      $qtdPontoPrincipal = 1;
                     }
-                    if(sizeOf($clienteFibra) >= 1)
-                    {
-                      $resultado[6] = 30.00 + ($resultado[8] * 20.00);
-                      $desativado = "disabled";
+                    if (sizeOf($clienteFibra) >= 1) {
+                      $valorComissao = 30.00 + ($qtdPontoSecundario * 20.00);
                     }
-                    else
-                    {
-                      $resultado[6] = 26.56 + ($resultado[8] * 18.00);
-                      $desativado = "disabled";
-                    }
-                  }elseif($resultado[7] == 1 AND $resultado[8] >=0)
-                  {
-                    if(sizeOf($clienteFibra) >= 1)
-                    {
-                      $resultado[6] = 30.00 + ($resultado[8] * 20.00);
-                      $desativado = "disabled";
-                    }
-                    else
-                    {
-                      $resultado[6] = 26.56 + ($resultado[8] * 18.00);
-                      $desativado = "disabled";
+                  } elseif($qtdPontoPrincipal == 1 AND $qtdPontoSecundario >=0) {
+                    $valorComissao = 26.56 + ($qtdPontoSecundario * 18.00);
+                    $desativado = "disabled";
+
+                    if (sizeOf($clienteFibra) >= 1) {
+                      $valorComissao = 30.00 + ($qtdPontoSecundario * 20.00);
                     }
                   }
-                }
-                elseif(strpos($resultado[0],"DESCONEXAO ") !== FALSE )
-                {
-                  $resultado[6] = 25.00;
+                } elseif(strpos($nomeServico,"DESCONEXAO ") !== FALSE ) {
+                  $valorComissao = 25.00;
                   $desativado = "disabled";
-                }
-                elseif(strpos($resultado[0],"TRANSFERENCIA") !== FALSE)
-                {
-                  if($resultado[7] > 1 AND $resultado[8] >= 0)
-                  {
-                    $resultado[7] = $resultado[7] - 1;
-                    $resultado[8] = $resultado[8] + $resultado[7];
-                    if($resultado[7] !=1)
-                    {
-                        $resultado[7] = 1;
-                    }
-                    if(sizeOf($clienteFibra) >= 1)
-                    {
-                      $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
-                      $desativado = "disabled";
-                    }
-                    else
-                    {
-                      $resultado[6] = 38.24 + ($resultado[8] * 18.00);
-                      $desativado = "disabled";
-                    }
-                  }
-                  elseif($resultado[7] == 1 AND $resultado[8] >=0)
-                  {
-                    if(sizeOf($clienteFibra) >= 1)
-                    {
-                      $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
-                      $desativado = "disabled";
-                    }
-                    else
-                    {
-                      $resultado[6] = 38.24 + ($resultado[8] * 18.00);
-                      $desativado = "disabled";
-                    }
-                  }
-                }
-                elseif(strpos($resultado[0],"RECONEXAO") !== FALSE )
-                {
-                  if($resultado[7] > 1 AND $resultado[8] >= 0)
-                  {
-                    $resultado[7] = $resultado[7] - 1;
-                    $resultado[8] = $resultado[8] + $resultado[7];
-                    if($resultado[7] !=1)
-                    {
-                        $resultado[7] = 1;
-                    }
-                    if(sizeOf($clienteFibra) >= 1)
-                    {
-                      $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
-                      $desativado = "disabled";
-                    }
-                    else
-                    {
-                      $resultado[6] = 38.24 + ($resultado[8] * 18.00);
-                      $desativado = "disabled";
-                    }
-                  }
-                  elseif($resultado[7] == 1 AND $resultado[8] >=0)
-                  {
-                    if(sizeOf($clienteFibra) >= 1)
-                    {
-                      $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
-                      $desativado = "disabled";
-                    }
-                    else
-                    {
-                      $resultado[6] = 38.24 + ($resultado[8] * 18.00);
-                      $desativado = "disabled";
-                    }
-                  }
-                }
-                elseif($resultado[7] > 1 AND $resultado[8] >= 0) //se primeira conexao predio
-                {
-                  $resultado[7] = $resultado[7] - 1;
-                  $resultado[8] = $resultado[8] + $resultado[7];
-                  if($resultado[7] != 1)
-                  {
-                    $resultado[7] = 1;
-                  }
-                  if(sizeOf($clienteFibra) >= 1)
-                  {
-                    $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
+                } elseif (strpos($nomeServico,"TRANSFERENCIA") !== FALSE) {
+                  if ($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0) {
+                    $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
+                    $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
+
+                    $valorComissao = 38.24 + ($qtdPontoSecundario * 18.00);
                     $desativado = "disabled";
-                  }
-                  else
-                  {
-                    $resultado[6] = 38.24 + ($resultado[8] * 18.00);
+
+                    if ($qtdPontoPrincipal !=1) {
+                        $qtdPontoPrincipal = 1;
+                    }
+
+                    if (sizeOf($clienteFibra) >= 1) {
+                        $valorComissao = 55.00 + ($qtdPontoSecundario * 20.00);//se for predio
+                    }
+                  } elseif ($qtdPontoPrincipal == 1 AND $qtdPontoSecundario >=0) {
+                    $valorComissao = 38.24 + ($qtdPontoSecundario * 18.00);
                     $desativado = "disabled";
+
+                    if (sizeOf($clienteFibra) >= 1) {
+                      $valorComissao = 55.00 + ($qtdPontoSecundario * 20.00);//se for predio
+                      $desativado = "disabled";
+                    }
                   }
-                }
-                elseif($resultado[7] == 1 AND sizeOf($clienteFibra) >=1)
-                {
-                  if($resultado[8] >= 0)
-                  {
-                    $resultado[6] = 55.00 + ($resultado[8] * 20.00);//se for predio
+                } elseif(strpos($nomeServico,"RECONEXAO") !== FALSE ) {
+                  if($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0) {
+                    $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
+                    $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
+
+                    $valorComissao = 38.24 + ($qtdPontoSecundario * 18.00);
                     $desativado = "disabled";
-                  }else{
-                    $resultado[6] = 55.00;
+
+                    if($qtdPontoPrincipal !=1) {
+                        $qtdPontoPrincipal = 1;
+                    }
+                    if(sizeOf($clienteFibra) >= 1) {
+                      $valorComissao = 55.00 + ($qtdPontoSecundario * 20.00);//se for predio
+                    }
+                  } elseif($qtdPontoPrincipal == 1 AND $qtdPontoSecundario >=0) {
+                    $valorComissao = 38.24 + ($qtdPontoSecundario * 18.00);
                     $desativado = "disabled";
+
+                    if(sizeOf($clienteFibra) >= 1) {
+                      $valorComissao = 55.00 + ($qtdPontoSecundario * 20.00);//se for predio fibra
+                    }
                   }
-                }
-                elseif($resultado[7] == 0 AND sizeOf($clienteFibra)>=1)//se no Cplus vier zerado
-                {
-                  if($pontosDoCliente[0] > 1)
-                  {
-                    $resultado[7] = 1;
-                    $resultado[8] = $pontosDoCliente[0] - $resultado[7];
-                  }else{
-                    $resultado[7] = $pontosDoCliente[0];
-                    $resultado[8] = 0;
+                } elseif($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0) { //se primeira conexao predio
+                  $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
+                  $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
+
+                  $valorComissao = 38.24 + ($qtdPontoSecundario * 18.00);
+                  $desativado = "disabled";
+
+                  if($qtdPontoPrincipal != 1) {
+                    $qtdPontoPrincipal = 1;
                   }
-                  if($resultado[8] > 0)
-                  {
-                    $resultado[6] = 55.00 + ($resultado[8] * 20.00);
-                    $desativado = "disabled";
+
+                  if (sizeOf($clienteFibra) >= 1) {
+                    $valorComissao = 55.00 + ($qtdPontoSecundario * 20.00);//se for predio
                   }
-                  else{
-                    $resultado[6] = 55.00;
-                    $desativado = "disabled";
+                } elseif ($qtdPontoPrincipal == 1 AND sizeOf($clienteFibra) >=1) {
+                  $valorComissao = 55.00;
+                  $desativado = "disabled";
+
+                  //se tier ponto adicional
+                  if ($qtdPontoSecundario >= 0) {
+                    $valorComissao = 55.00 + ($qtdPontoSecundario * 20.00);//se for predio
+                  }
+                } elseif ($qtdPontoPrincipal == 0 AND sizeOf($clienteFibra)>=1) { //se no Cplus vier zerado
+                  $qtdPontoPrincipal = $pontosDoCliente[0];
+                  $qtdPontoSecundario = 0;
+
+                  $valorComissao = 55.00;
+                  $desativado = "disabled";
+
+                  if ($pontosDoCliente[0] > 1) {
+                    $qtdPontoPrincipal = 1;
+                    $qtdPontoSecundario = $pontosDoCliente[0] - $qtdPontoPrincipal;
+                  }
+                  if ($qtdPontoSecundario > 0) {
+                    $valorComissao = 55.00 + ($qtdPontoSecundario * 20.00);
                   }
                 }
               }//FIM DE OUTROS SEM SER ASSISTENCIA (INSTALACAO)
+
               echo "<tr>
-                      <td>$resultado[0]</td>
-                      <td>$resultado[1]</td>
-                      <td>$resultado[2]</td>
-                      <td>$resultado[4]</td>
-                      <td>$resultado[5]</td>
-                      <td>$resultado[6]</td>
-                      <td>$resultado[7]</td>
-                      <td>$resultado[8]</td>
-                      <td>$resultado[9]</td>
+                      <td>$nomeServico</td>
+                      <td>$dataAgendamento</td>
+                      <td>$dataExecucao</td>
+                      <td>$numeroOS</td>
+                      <td>$numeroContrato</td>
+                      <td>$valorComissao</td>
+                      <td>$qtdPontoPrincipal</td>
+                      <td>$qtdPontoSecundario</td>
+                      <td>$numeroApto</td>
                       <td>
-                          <button class='btn btn-default' onClick = ajustarValorComissao($resultado[4]) $desativado>
+                          <button class='btn btn-default' onClick = ajustarValorComissao($numeroOS) $desativado>
                             <span class='glyphicon glyphicon-cog'></span>
                           </button>
                       </td>
