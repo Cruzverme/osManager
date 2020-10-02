@@ -95,18 +95,29 @@
             $quantidade_OS = 0;
             while ($resultado = oci_fetch_array($sql_comissao, OCI_BOTH))
             {
+                $nomeServico = $resultado[0];
+                $dataAgendamento = $resultado[1];
+                $dataExecucao = $resultado[2];
+                $nomeEquipe = $resultado[3];
+                $numeroOS = $resultado[4];
+                $numeroContrato = $resultado[5];
+                $valorComissao = $resultado[6];
+                $qtdPontoPrincipal = $resultado[7];
+                $qtdPontoSecundario = $resultado[8];
+                $numeroApto = $resultado[9];
+
               $desativado = "";
-              $clienteFibra = verificaPacote($resultado[5],$dataInicial,$dataFinal,$resultado[3]);
-              $pontosDoCliente = verificarPontos($resultado[5],$resultado[4]);
+              $clienteFibra = verificaPacote($numeroContrato,$dataInicial,$dataFinal,$nomeEquipe);
+              $pontosDoCliente = verificarPontos($numeroContrato,$numeroOS);
               if(sizeOf($clienteFibra) >= 1)
               {
-                $resultado[0] = "$resultado[0]-FTTH";
+                  $nomeServico = "$resultado[0]-FTTH";
               }else{
-                $resultado[0] = "$resultado[0]-HFC";
+                  $nomeServico = "$resultado[0]-HFC";
               }
               if(($tipo != "assistencia" AND $tipo != "desconexao") and $resultado[9] == null ) //SEM APARTAMENTO
               {
-                if(strpos($resultado[0],"CONEXAO PONTO ADICIONAL") !== FALSE)
+                if(strpos($nomeServico,"CONEXAO PONTO ADICIONAL") !== FALSE)
                 {
                   if($resultado[7] > 1 AND $resultado[8] >=0)
                   {
@@ -149,11 +160,11 @@
                       $desativado = "disabled";
                     }
                   }
-                }elseif(strpos($resultado[0],"DESCONEXAO") !== FALSE )
+                }elseif(strpos($nomeServico,"DESCONEXAO") !== FALSE )
                 {
                     $resultado[6] = 25.00;
                 }
-                elseif(strpos($resultado[0],"TRANSFERENCIA") !== FALSE)
+                elseif(strpos($nomeServico,"TRANSFERENCIA") !== FALSE)
                 {
                   if($resultado[7] > 1 AND $resultado[8] >= 0)
                   {
@@ -188,7 +199,7 @@
                     }
                   }
                 }
-                elseif(strpos($resultado[0],"RECONEXAO") !== FALSE )
+                elseif(strpos($nomeServico,"RECONEXAO") !== FALSE )
                 {
                     if($resultado[7] > 1 AND $resultado[8] >= 0)
                     {
@@ -277,7 +288,7 @@
               }//FIM TIPO ASSISTENCIA
               elseif(($tipo != "assistencia" AND $tipo != "desconexao")and $resultado[9] != null)
               {
-                if(strpos($resultado[0],"CONEXAO PONTO ADICIONAL") !== FALSE)
+                if(strpos($nomeServico,"CONEXAO PONTO ADICIONAL") !== FALSE)
                 {
                   if($resultado[7] > 1 AND $resultado[8] >=0)
                   {
@@ -311,12 +322,12 @@
                     }
                   }
                 }
-                elseif(strpos($resultado[0],"DESCONEXAO ") !== FALSE )
+                elseif(strpos($nomeServico,"DESCONEXAO ") !== FALSE )
                 {
                   $resultado[6] = 25.00;
                   $desativado = "disabled";
                 }
-                elseif(strpos($resultado[0],"TRANSFERENCIA") !== FALSE)
+                elseif(strpos($nomeServico,"TRANSFERENCIA") !== FALSE)
                 {
                   if($resultado[7] > 1 AND $resultado[8] >= 0)
                   {
@@ -351,7 +362,7 @@
                     }
                   }
                 }
-                elseif(strpos($resultado[0],"RECONEXAO") !== FALSE )
+                elseif(strpos($nomeServico,"RECONEXAO") !== FALSE )
                 {
                   if($resultado[7] > 1 AND $resultado[8] >= 0)
                   {
@@ -438,7 +449,7 @@
                 }
               }//FIM DE OUTROS SEM SER ASSISTENCIA (INSTALACAO)
               echo "<tr>
-                      <td>$resultado[0]</td>
+                      <td>$nomeServico</td>
                       <td>$resultado[1]</td>
                       <td>$resultado[2]</td>
                       <td>$resultado[4]</td>
