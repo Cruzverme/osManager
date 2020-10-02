@@ -304,7 +304,7 @@
                       $valorComissao = 55.00 + ($qtdPontoSecundario * 20.00);//se for predio fibra
                     }
                   }
-                } elseif (strpos($nomeServico,"CONEXAO PONTO ADICIONAL") !== FALSE) {
+                } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
                     $valorComissao = 2500;
                 } elseif($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0) { //se primeira conexao predio
                   $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
