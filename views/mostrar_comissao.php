@@ -95,7 +95,7 @@
             $quantidade_OS = 0;
             while ($resultado = oci_fetch_array($sql_comissao, OCI_BOTH))
             {
-                $nomeServico = $resultado[0];
+                $nomeServico = "$resultado[0]-HFC";;
                 $dataAgendamento = $resultado[1];
                 $dataExecucao = $resultado[2];
                 $nomeEquipe = $resultado[3];
@@ -109,12 +109,11 @@
               $desativado = "";
               $clienteFibra = verificaPacote($numeroContrato,$dataInicial,$dataFinal,$nomeEquipe);
               $pontosDoCliente = verificarPontos($numeroContrato,$numeroOS);
-              if(sizeOf($clienteFibra) >= 1)
-              {
+
+              if(sizeOf($clienteFibra) >= 1) {
                   $nomeServico = "$resultado[0]-FTTH";
-              }else{
-                  $nomeServico = "$resultado[0]-HFC";
               }
+
               if(($tipo != "assistencia" AND $tipo != "desconexao") and $numeroApto == null ) //SEM APARTAMENTO
               {
                 if(strpos($nomeServico,"CONEXAO PONTO ADICIONAL") !== FALSE)
