@@ -192,7 +192,7 @@
                         $valorComissao = 80.00 + ($qtdPontoSecundario * 20.00);
                       }
                     }
-                } elseif (strpos($nomeServico,"CONEXAO PONTO ADICIONAL") !== FALSE) {
+                } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
                     $valorComissao = 1500;
                 } elseif ($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0) {
                   $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
