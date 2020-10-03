@@ -196,6 +196,14 @@
                     }
                 } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
                     if (isMigration($observacao1) || isMigration($observacao2)) {
+                        $qtdPontoPrincipal = $pontosDoCliente[0];
+                        $qtdPontoSecundario = 0;
+
+                        if ($pontosDoCliente[0] > 1) {
+                            $qtdPontoPrincipal = 1;
+                            $qtdPontoSecundario = $pontosDoCliente[0] - $qtdPontoPrincipal;
+                        }
+
                         if($qtdPontoPrincipal > 1 and $qtdPontoSecundario >= 0) {
                             $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
                             $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
@@ -332,6 +340,14 @@
                   }
                 } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
                     if (isMigration($observacao1) || isMigration($observacao2)) {
+                        $qtdPontoPrincipal = $pontosDoCliente[0];
+                        $qtdPontoSecundario = 0;
+
+                        if ($pontosDoCliente[0] > 1) {
+                            $qtdPontoPrincipal = 1;
+                            $qtdPontoSecundario = $pontosDoCliente[0] - $qtdPontoPrincipal;
+                        }
+
                         if($qtdPontoPrincipal > 1 and $qtdPontoSecundario >= 0) {
                             $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
                             $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
