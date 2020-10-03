@@ -72,7 +72,7 @@
                           WHERE a.contra = d.contra AND b.nome = '$equipe' AND b.codcid = a.codcid AND a.codequ = b.codequ 
                           AND a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal' AND a.codser = c.codser AND
                           (c.codser LIKE '2%'  OR c.nome LIKE '%RETIRADA%')
-                          ORDER BY a.dtexec ASC");
+                          ORDER BY a.dtexec, a.contra ASC");
 
             if($tipo == "assistencia")
             {
@@ -81,13 +81,13 @@
                           b.nome = '$equipe' AND b.codcid = a.codcid AND a.codequ = b.codequ AND a.codsere is not null  AND 
                           a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codcla <> 1
                           AND c.codser NOT LIKE '2%' AND c.nome NOT LIKE 'RETIRADA%'  
-                          ORDER BY a.dtexec ASC");
+                          ORDER BY a.dtexec, a.contra ASC");
             }elseif($tipo == "instalacao"){
               $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, a.obser1, a.obser2
                           FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
                           b.nome = '$equipe' AND b.codcid = a.codcid AND a.codequ = b.codequ AND a.codsere is not null  AND 
                           a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codcla = 1 
-                          ORDER BY a.dtexec ASC");
+                          ORDER BY a.dtexec, a.contra ASC");
             }
            $ok = oci_execute($sql_comissao);
           
