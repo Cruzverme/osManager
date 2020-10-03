@@ -111,6 +111,7 @@
               $desativado = "";
               $clienteFibra = verificaPacote($numeroContrato,$dataInicial,$dataFinal,$nomeEquipe);
               $pontosDoCliente = verificarPontos($numeroContrato,$numeroOS);
+              $quantidadePontoFTTH = verificaPontosFTTH($numeroContrato);
 
               if(sizeOf($clienteFibra) >= 1) {
                   $nomeServico = "$resultado[0]-FTTH";
@@ -196,12 +197,12 @@
                     }
                 } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
                     if (isMigration($observacao1) || isMigration($observacao2)) {
-                        $qtdPontoPrincipal = $pontosDoCliente[0];
-                        $qtdPontoSecundario = 0;
-
-                        if ($pontosDoCliente[0] > 1) {
+                        if ($qtdPontoPrincipal < 1) {
                             $qtdPontoPrincipal = 1;
-                            $qtdPontoSecundario = $pontosDoCliente[0] - $qtdPontoPrincipal;
+
+                            if ($quantidadePontoFTTH > 1) {
+                                $qtdPontoSecundario = $quantidadePontoFTTH - $qtdPontoPrincipal;
+                            }
                         }
 
                         if($qtdPontoPrincipal > 1 and $qtdPontoSecundario >= 0) {
@@ -340,12 +341,12 @@
                   }
                 } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
                     if (isMigration($observacao1) || isMigration($observacao2)) {
-                        $qtdPontoPrincipal = $pontosDoCliente[0];
-                        $qtdPontoSecundario = 0;
-
-                        if ($pontosDoCliente[0] > 1) {
+                        if ($qtdPontoPrincipal < 1) {
                             $qtdPontoPrincipal = 1;
-                            $qtdPontoSecundario = $pontosDoCliente[0] - $qtdPontoPrincipal;
+
+                            if ($quantidadePontoFTTH > 1) {
+                                $qtdPontoSecundario = $quantidadePontoFTTH - $qtdPontoPrincipal;
+                            }
                         }
 
                         if($qtdPontoPrincipal > 1 and $qtdPontoSecundario >= 0) {
