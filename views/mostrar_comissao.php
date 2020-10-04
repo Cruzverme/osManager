@@ -429,7 +429,7 @@
                     </tr>";
 
                     $quantidade_OS+=1;
-                    $valor_comissao = str_replace(',','.',$valor_comissao);
+                    $valor_comissao = str_replace(',','.',$valorComissao);
                     $soma+=$valor_comissao;
             }//FIM WHILE        
             echo "<p style='font-size:30px;'>Valor a ser pago: R$".str_replace('.',',',$soma)." | Total de OS: ".$quantidade_OS."</p>";
