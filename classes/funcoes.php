@@ -90,7 +90,37 @@
         }
       }
     }
-  }  
+  }
+
+/**
+ * @param $contrato
+ * @return mixed
+ */
+  function verificaPontosFTTH($contrato)
+  {
+    $sql= "SELECT count(pontos) FROM cplus.tva1600 pontos
+            INNER JOIN cplus.tva1000 nomePonto ON (nomePonto.nome LIKE '%FIBRA%' OR nomePonto.nome LIKE '%IPTV%') 
+            AND nomePonto.codprog = pontos.codprog 
+            WHERE contra = $contrato";
+
+    $quantidade_pontos_ftth = oci_parse($conn,$sql);
+    oci_execute($quantidade_pontos_ftth);
+    $linha = oci_fetch_array($quantidade_pontos_ftth);
+    $numero_linhas = $linha[0];
+
+    return $numero_linhas;
+  }
+
+  function isMigration($frase)
+  {
+    $lista = ["MIGRAR", "MIGRACAO", "MIGRAÇÃO"];
+
+    foreach($lista as $palavra) {
+      if (strpos($frase, $palavra) !== false) {
+        return true;
+      }
+    }
+  }
 
 //  $ok = verificaStatusOS();
 //  $ok = verificarPontos(29431,561113);

@@ -67,27 +67,27 @@
             $dataInicial = converteData($dataInicial);
             $dataFinal = converteData($dataFinal);
 
-            $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, c.codser,a.codsere
+            $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, a.obser1, a.obser2
                           FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d 
                           WHERE a.contra = d.contra AND b.nome = '$equipe' AND b.codcid = a.codcid AND a.codequ = b.codequ 
                           AND a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal' AND a.codser = c.codser AND
                           (c.codser LIKE '2%'  OR c.nome LIKE '%RETIRADA%')
-                          ORDER BY a.dtexec ASC");
+                          ORDER BY a.dtexec, a.contra ASC");
 
             if($tipo == "assistencia")
             {
-              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
+              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, a.obser1, a.obser2
                           FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
                           b.nome = '$equipe' AND b.codcid = a.codcid AND a.codequ = b.codequ AND a.codsere is not null  AND 
                           a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codcla <> 1
                           AND c.codser NOT LIKE '2%' AND c.nome NOT LIKE 'RETIRADA%'  
-                          ORDER BY a.dtexec ASC");
+                          ORDER BY a.dtexec, a.contra ASC");
             }elseif($tipo == "instalacao"){
-              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto
+              $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, a.obser1, a.obser2
                           FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d WHERE a.contra = d.contra AND
                           b.nome = '$equipe' AND b.codcid = a.codcid AND a.codequ = b.codequ AND a.codsere is not null  AND 
                           a.DTEXEC BETWEEN '$dataInicial' and '$dataFinal'  AND a.codser = c.codser AND c.codcla = 1 
-                          ORDER BY a.dtexec ASC");
+                          ORDER BY a.dtexec, a.contra ASC");
             }
            $ok = oci_execute($sql_comissao);
           
@@ -105,10 +105,13 @@
                 $qtdPontoPrincipal = $resultado[7];
                 $qtdPontoSecundario = $resultado[8];
                 $numeroApto = $resultado[9];
+                $observacao1 = $resultado[10];
+                $observacao2 = $resultado[11];
 
               $desativado = "";
               $clienteFibra = verificaPacote($numeroContrato,$dataInicial,$dataFinal,$nomeEquipe);
               $pontosDoCliente = verificarPontos($numeroContrato,$numeroOS);
+              $quantidadePontoFTTH = verificaPontosFTTH($numeroContrato);
 
               if(sizeOf($clienteFibra) >= 1) {
                   $nomeServico = "$resultado[0]-FTTH";
@@ -170,7 +173,7 @@
                   }
                 }
                 elseif(strpos($nomeServico,"RECONEXAO") !== FALSE ) {
-                    if($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0) {
+                    if($qtdPontoPrincipal > 1 and $qtdPontoSecundario >= 0) {
                       $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
                       $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
 
@@ -184,7 +187,7 @@
                       if (sizeOf($clienteFibra) >= 1) {
                         $valorComissao = 80.00 + ($qtdPontoSecundario * 20.00);
                       }
-                    } elseif($qtdPontoPrincipal == 1 AND $qtdPontoSecundario >=0) {
+                    } elseif($qtdPontoPrincipal == 1 and $qtdPontoSecundario >=0) {
                       $valorComissao= 65.86 + ($qtdPontoSecundario * 18.00);
                       $desativado = "disabled";
 
@@ -192,6 +195,40 @@
                         $valorComissao = 80.00 + ($qtdPontoSecundario * 20.00);
                       }
                     }
+                } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
+                    if (isMigration($observacao1) || isMigration($observacao2)) {
+                        if ($qtdPontoPrincipal < 1) {
+                            $qtdPontoPrincipal = 1;
+
+                            if ($quantidadePontoFTTH > 1) {
+                                $qtdPontoSecundario = $quantidadePontoFTTH - $qtdPontoPrincipal;
+                            }
+                        }
+
+                        if($qtdPontoPrincipal > 1 and $qtdPontoSecundario >= 0) {
+                            $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
+                            $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
+
+                            if($qtdPontoPrincipal !=1) {
+                                $qtdPontoPrincipal = 1;
+                            }
+
+                            $valorComissao = 65.00 + ($qtdPontoSecundario * 18.00);
+                            $desativado = "disabled";
+
+                            if (sizeOf($clienteFibra) >= 1) {
+                                $valorComissao = 65.00 + ($qtdPontoSecundario * 20.00);
+                            }
+                        } elseif($qtdPontoPrincipal == 1 and $qtdPontoSecundario >=0) {
+                            $valorComissao= 65.00 + ($qtdPontoSecundario * 18.00);
+                            $desativado = "disabled";
+
+                            if (sizeOf($clienteFibra) >= 1) {
+                                $valorComissao = 65.00 + ($qtdPontoSecundario * 20.00);
+                            }
+                        }
+                    }
+
                 } elseif ($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0) {
                   $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
                   $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
@@ -302,6 +339,39 @@
                       $valorComissao = 55.00 + ($qtdPontoSecundario * 20.00);//se for predio fibra
                     }
                   }
+                } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
+                    if (isMigration($observacao1) || isMigration($observacao2)) {
+                        if ($qtdPontoPrincipal < 1) {
+                            $qtdPontoPrincipal = 1;
+
+                            if ($quantidadePontoFTTH > 1) {
+                                $qtdPontoSecundario = $quantidadePontoFTTH - $qtdPontoPrincipal;
+                            }
+                        }
+
+                        if($qtdPontoPrincipal > 1 and $qtdPontoSecundario >= 0) {
+                            $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
+                            $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
+
+                            if($qtdPontoPrincipal !=1) {
+                                $qtdPontoPrincipal = 1;
+                            }
+
+                            $valorComissao = 38.00 + ($qtdPontoSecundario * 18.00);
+                            $desativado = "disabled";
+
+                            if (sizeOf($clienteFibra) >= 1) {
+                                $valorComissao = 38.00 + ($qtdPontoSecundario * 20.00);
+                            }
+                        } elseif($qtdPontoPrincipal == 1 and $qtdPontoSecundario >=0) {
+                            $valorComissao= 38.00 + ($qtdPontoSecundario * 18.00);
+                            $desativado = "disabled";
+
+                            if (sizeOf($clienteFibra) >= 1) {
+                                $valorComissao = 38.00 + ($qtdPontoSecundario * 20.00);
+                            }
+                        }
+                    }
                 } elseif($qtdPontoPrincipal > 1 AND $qtdPontoSecundario >= 0) { //se primeira conexao predio
                   $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
                   $qtdPontoSecundario = $qtdPontoSecundario + $qtdPontoPrincipal;
@@ -359,7 +429,7 @@
                     </tr>";
 
                     $quantidade_OS+=1;
-                    $valor_comissao = str_replace(',','.',$resultado[6]);
+                    $valor_comissao = str_replace(',','.',$valorComissao);
                     $soma+=$valor_comissao;
             }//FIM WHILE        
             echo "<p style='font-size:30px;'>Valor a ser pago: R$".str_replace('.',',',$soma)." | Total de OS: ".$quantidade_OS."</p>";
