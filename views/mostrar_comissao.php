@@ -15,7 +15,9 @@
     case 'instalacao': $labelTipo = 'Instalação';break;
     case 'desconexao': $labelTipo = 'Desconexão';break;
 
-  } 
+  }
+
+  $listaComissao = array();
 ?>
 
 <body>
@@ -38,6 +40,7 @@
         <div class='col-md-12'>
           <button type='submit' class='btn btn-info pull-right'> <span class='glyphicon glyphicon-save-file'>  GERAR PDF</span></button>
         <div>
+        <input type="hidden" name="listaComissao" value="<?php serialize($listaComissao)?>">
         <input type="hidden" name="tipoRelatorio" value="<?php echo $tipo ?>" />
         <input type="hidden" name="equipe" value="<?php echo $equipe ?>" />
         <input type="hidden" name="start" value="<?php echo $dataInicial ?>" />
@@ -340,7 +343,17 @@
                   }
                 }
               }//FIM DE OUTROS SEM SER ASSISTENCIA (INSTALACAO)
-
+              array_push($listaComissao, array(
+                        "nomeServico" => $nomeServico,
+                        "dataAgendamento" => $dataAgendamento,
+                        "dataExecucao" => $dataExecucao,
+                        "numeroOS" => $numeroOS,
+                        "numeroContrato" => $numeroContrato,
+                        "valorComissao" => $valorComissao,
+                        "qtdPontoPrincipal" => $qtdPontoPrincipal,
+                        "qtdPontoSecundario" => $qtdPontoSecundario,
+                        "numeroApto" => $numeroApto,
+              ));
               echo "<tr>
                       <td>$nomeServico</td>
                       <td>$dataAgendamento</td>
