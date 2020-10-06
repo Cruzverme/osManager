@@ -8,7 +8,7 @@
   $tipo = filter_input(INPUT_POST,"tipoRelatorio");
   $dataInicial = filter_input(INPUT_POST,"start");
   $dataFinal = filter_input(INPUT_POST,"end");
-  $dataInfo = filter_input(INPUT_POST,'listaComissao');
+  $dataInfo = $_POST['listaComissao'];
 
   $listaComissao = unserialize($dataInfo);
   switch($tipo)
