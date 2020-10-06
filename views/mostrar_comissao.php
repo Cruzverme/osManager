@@ -372,7 +372,7 @@ while ($resultado = oci_fetch_array($sql_comissao, OCI_BOTH)) {
                     </tr>";
 
                     $quantidade_OS+=1;
-                    $valor_comissao = str_replace(',','.',$resultado[6]);
+                    $valor_comissao = str_replace(',','.',$comissao['valorComissao']);
                     $soma+=$valor_comissao;
             }//FIM WHILE        
             echo "<p style='font-size:30px;'>Valor a ser pago: R$".str_replace('.',',',$soma)." | Total de OS: ".$quantidade_OS."</p>";
