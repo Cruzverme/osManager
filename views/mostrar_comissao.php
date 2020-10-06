@@ -326,7 +326,7 @@ while ($resultado = oci_fetch_array($sql_comissao, OCI_BOTH)) {
         <div class='col-md-12'>
           <button type='submit' class='btn btn-info pull-right'> <span class='glyphicon glyphicon-save-file'>  GERAR PDF</span></button>
         <div>
-        <input type="hidden" name="listaComissao" value="<?php echo serialize($listaComissao)?>">
+        <input type="hidden" name="listaComissao" value="<?php echo htmlspecialchars(serialize($listaComissao))?>">
         <input type="hidden" name="tipoRelatorio" value="<?php echo $tipo ?>" />
         <input type="hidden" name="equipe" value="<?php echo $equipe ?>" />
         <input type="hidden" name="start" value="<?php echo $dataInicial ?>" />

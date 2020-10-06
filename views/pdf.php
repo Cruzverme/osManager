@@ -10,7 +10,8 @@
   $dataFinal = filter_input(INPUT_POST,"end");
   $dataInfo = filter_input(INPUT_POST,'listaComissao');
 
-  $listaComissao = unserialize($dataInfo);
+  $listaComissao = unserialize(stripslashes( htmlspecialchars_decode($dataInfo)));
+
   switch($tipo)
   {
     case 'assistencia': $labelTipo = 'Assistência';break;
