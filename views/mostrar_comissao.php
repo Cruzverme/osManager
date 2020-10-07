@@ -20,7 +20,7 @@
 
     $dataInicial = converteData($dataInicial);
     $dataFinal = converteData($dataFinal);
-
+    $listaComissao = array();
     $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, a.obser1, a.obser2
                               FROM cplus.tva1700 a, cplus.tva1920 b, cplus.tva2000 c, cplus.tva0900 d 
                               WHERE a.contra = d.contra AND b.nome = '$equipe' AND b.codcid = a.codcid AND a.codequ = b.codequ 
