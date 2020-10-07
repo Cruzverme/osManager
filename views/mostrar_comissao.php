@@ -6,8 +6,8 @@
 
   $equipe = filter_input(INPUT_POST,"equipe");
   $tipo = filter_input(INPUT_POST,"tipoRelatorio");
-  $dataInicial = filter_input(INPUT_POST,"start");
-  $dataFinal = filter_input(INPUT_POST,"end");
+  $dataInicialSelected = filter_input(INPUT_POST,"start");
+  $dataFinalSelected = filter_input(INPUT_POST,"end");
 
   switch($tipo)
   {
@@ -18,8 +18,8 @@
   }
 
 
-    $dataInicial = converteData($dataInicial);
-    $dataFinal = converteData($dataFinal);
+    $dataInicial = converteData($dataInicialSelected);
+    $dataFinal = converteData($dataFinalSelected);
     $listaComissao = array();
 
     $sql_comissao = oci_parse($conn, "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, a.obser1, a.obser2
@@ -377,9 +377,6 @@
     } //End While
     oci_free_statement($sql_comissao);
     oci_close($conn);
-
-    $dataInicialLabel = converteData($dataInicial);
-    $dataFinalLabel = converteData($dataFinal);
 ?>
 
 <body>
@@ -394,7 +391,7 @@
     </div>
     <div class=row>
       <div class='col-md-12'>
-        <?php echo "<center><h1>Comissão de $labelTipo da $equipe entre $dataInicialLabel - $dataFinalLabel </h1></center>";?>
+        <?php echo "<center><h1>Comissão de $labelTipo da $equipe entre $dataInicialSelected - $dataFinalSelected </h1></center>";?>
       </div>
     </div>
     <div class=row>
