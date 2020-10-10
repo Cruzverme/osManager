@@ -54,7 +54,7 @@
     join cplus.tva1700 os on pontos.contra = os.contra 
     where os.os = $ordemServico and pontos.codsit = 27 and pontos.contra = $contrato and pontos.codprog != 325 ";
 
-    $prepara_query = oci_parse($conn,$sql); 
+    $prepara_query = oci_parse($conn,$sql);
     oci_execute($prepara_query);
     $array = array();
     while ($resultado = oci_fetch_array($prepara_query, OCI_BOTH))
@@ -98,8 +98,11 @@
  */
   function verificaPontosFTTH($contrato)
   {
+    include "../config/db_oracle.php";
+
     $sql= "SELECT count(pontos) FROM cplus.tva1600 pontos
-            INNER JOIN cplus.tva1000 nomePonto ON (nomePonto.nome LIKE '%FIBRA%' OR nomePonto.nome LIKE '%IPTV%') 
+            INNER JOIN cplus.tva1000 nomePonto ON (nomePonto.nome LIKE '%FIBRA%' OR nomePonto.nome LIKE '%IPTV%') AND 
+            nomePonto.nome NOT LIKE '%FONE%'
             AND nomePonto.codprog = pontos.codprog 
             WHERE contra = $contrato";
 
@@ -120,6 +123,19 @@
         return true;
       }
     }
+  }
+
+  function apartType($contrato)
+  {
+    include "../config/db_oracle.php";
+
+    $sql = "SELECT e.TIPPRUMA FROM CPLUS.tva0400 e INNER JOIN CPLUS.TVA0900 t ON CONTRA = '$contrato' WHERE e.CODRUA = t.CODRUA AND e.CODBAI = t.CODBAI AND e.CODCID = t.CODCID AND e.CODQUA = t.CODQUA AND e.NENDE = t.NENDE AND rownum = 1";
+
+    $edificoQuery = oci_parse($conn,$sql);
+    oci_execute($edificoQuery);
+    $linha = oci_fetch_assoc($edificoQuery);
+
+    return $linha;
   }
 
 //  $ok = verificaStatusOS();

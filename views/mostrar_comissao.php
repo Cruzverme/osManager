@@ -65,6 +65,7 @@
         $clienteFibra = verificaPacote($numeroContrato,$dataInicial,$dataFinal,$nomeEquipe);
         $pontosDoCliente = verificarPontos($numeroContrato,$numeroOS);
         $quantidadePontoFTTH = verificaPontosFTTH($numeroContrato);
+        $verificaEdificioBackbone = apartType($numeroContrato);
 
         if(sizeOf($clienteFibra) >= 1) {
             $nomeServico = "$resultado[0]-FTTH";
