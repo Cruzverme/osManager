@@ -373,6 +373,7 @@
             "qtdPontoPrincipal" => $qtdPontoPrincipal,
             "qtdPontoSecundario" => $qtdPontoSecundario,
             "numeroApto" => $numeroApto,
+            "desativado" => $desativado,
         ));
     } //End While
     oci_free_statement($sql_comissao);
@@ -440,11 +441,12 @@
                       <td>$comissao[qtdPontoSecundario]</td>
                       <td>$comissao[numeroApto]</td>
                       <td>
-                          <button class='btn btn-default' onClick = ajustarValorComissao($comissao[numeroOS]) $desativado>
+                          <button class='btn btn-default' type='button' onClick = ajustarValorComissao($comissao[numeroOS])> 
                             <span class='glyphicon glyphicon-cog'></span>
                           </button>
                       </td>
                     </tr>";
+//                $comissao[desativado]
 
                     $quantidade_OS+=1;
                     $valor_comissao = str_replace(',','.',$comissao['valorComissao']);
