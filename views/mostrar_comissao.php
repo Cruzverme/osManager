@@ -8,7 +8,8 @@
   $tipo = filter_input(INPUT_POST,"tipoRelatorio");
   $dataInicialSelected = filter_input(INPUT_POST,"start");
   $dataFinalSelected = filter_input(INPUT_POST,"end");
-
+error_reporting(0);
+  $desabilitar = "";
   switch($tipo)
   {
     case 'assistencia': $labelTipo = 'Assistência';break;
@@ -17,7 +18,11 @@
 
   }
 
-    $listaComissao = getOsDetails($equipe, $dataInicialSelected, $dataFinalSelected, $tipo);
+  if (!$permiteEditarOS AND $permissao != 99) {
+      $desabilitar = "disabled";
+  }
+
+  $listaComissao = getOsDetails($equipe, $dataInicialSelected, $dataFinalSelected, $tipo);
 ?>
 
 <body>
@@ -80,7 +85,7 @@
                       <td>$comissao[qtdPontoSecundario]</td>
                       <td>$comissao[numeroApto]</td>
                       <td>
-                          <button class='btn btn-default' type='button' onClick = ajustarValorComissao($comissao[numeroOS])> 
+                          <button class='btn btn-default' type='button' onClick = ajustarValorComissao($comissao[numeroOS]) $desabilitar> 
                             <span class='glyphicon glyphicon-cog'></span>
                           </button>
                       </td>

@@ -33,6 +33,7 @@
         $_SESSION["id_usuario"]= $dados["id"];
         $_SESSION["nome_usuario"] = $dados["nome"];
         $_SESSION["nivel"] = $dados["nivel_usuario"];
+        $_SESSION["editOS"] = $dados["editOS"];
         
         $date = new DateTime("NOW", new DateTimeZone('America/Sao_Paulo')); //ajusta hora de login
 
