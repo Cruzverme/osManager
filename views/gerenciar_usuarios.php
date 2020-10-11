@@ -2,11 +2,10 @@
   include "../config/db.php";
   
   include "../classes/header.php";
-  
+  $sql_usuario = "select * from system_user where id = $user_ativo";
+
   if($permissao == 99)
     $sql_usuario = "select * from system_user";
-  else
-    $sql_usuario = "select * from system_user where id = $user_ativo";
 
   $executa = mysqli_query($conectar,$sql_usuario);
 
@@ -77,15 +76,28 @@
 <!-- MODAL -->
     <div class="form-content" style="display:none;">
       <form class="form" role="form">
-        <?php 
+        <?php
+          $checado = "<input id='comissionEditSim' type='radio' name='editComission' value='Sim'><label for='comissionEditSim'>Sim</label>";
+          $checado .= "<input id='comissionEditNao' type='radio' name='editComission' value='Não' checked> <label for='comissionEditNao'>Não</label>";
+          if ($permiteEditarOS) {
+              $checado = "<input id='comissionEditSim' type='radio' name='editComission' value='Sim' checked><label for='comissionEditSim'>Sim</label>";
+              $checado .= "<input id='comissionEditNao' type='radio' name='editComission' value='Não'> <label for='comissionEditNao'>Não</label>";
+          }
           if($permissao == 99)
           {
             echo "<div class='form-group'>
                     <label for='permissao'>Alterar Tipo de Usuário</label>
-                    <select class='form-control' name=permissao>
+                    <select id='permissao' class='form-control' name=permissao>
                       <option value=0>Usuário</option>
                       <option value=99>Administrador</option>
                     </select>
+                  </div>
+                  <div>
+                    <label for='comissionEdit'>Permitir Editar Comissão?</label>
+                    <div id='comissionEdit'>
+                        $checado
+                    </div>
+                     
                   </div>
                   ";
           }
