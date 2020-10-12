@@ -62,7 +62,17 @@
     ");
     $soma = 0.00;
     $quantidade_OS = 0;
+    $quantidade_obs = 0;
+    $listaObservacoes = array();
+
     foreach ($listaComissao as $comissao) {
+      $linhaComissao = $comissao['valorComissao'];
+      if ($comissao['obsEdited']) {
+        $quantidade_obs+=1;
+        $linhaComissao = "$comissao[valorComissao]<sup style='font-size: 9px'><a id='linha$quantidade_obs' name='linha$quantidade_obs' href='#ref$quantidade_obs'>$quantidade_obs</a></sup>";
+        array_push($listaObservacoes, "<p id='ref$quantidade_obs'> <sup><a href='#linha$quantidade_obs' name='ref$quantidade_obs'>$quantidade_obs</a></sup>$comissao[obsEdited] </p>");
+      }
+
       $mpdf->WriteHTML("    
                 <tr>
                   <td>$comissao[nomeServico]</td>
@@ -70,7 +80,7 @@
                   <td>$comissao[dataExecucao]</td>
                   <td>$comissao[numeroOS]</td>
                   <td>$comissao[numeroContrato]</td>
-                  <td>$comissao[valorComissao]</td>
+                  <td>$linhaComissao</td>
                   <td>$comissao[qtdPontoPrincipal]</td>
                   <td>$comissao[qtdPontoSecundario]</td>
                   <td>$comissao[numeroApto]</td>
@@ -87,8 +97,17 @@
           </table>
         </div> 
         <p>Valor a ser pago: R$ ".str_replace('.',',',$soma)." | Total de OS: ".$quantidade_OS."</p>
-      </div>
+        <div class='observations'>
+      
     ",2);
+
+  foreach ($listaObservacoes as $observacoes) {
+    $mpdf->WriteHTML("$observacoes", 2);
+  }
+    $mpdf->WriteHTML("
+        </div>
+      </div>
+    ", 2);
     $mpdf->Output();
 
   } catch (\Mpdf\MpdfException $e) {
