@@ -73,19 +73,27 @@ error_reporting(0);
           <?php
             $soma = 0.00;
             $quantidade_OS = 0;
+            $quantidade_obs = 0;
+            $listaObservacoes = array();
             foreach ($listaComissao as $comissao) {
+                $linhaComissao = $comissao['valorComissao'];
+                if ($comissao['obsEdited']) {
+                    $quantidade_obs+=1;
+                    $linhaComissao = "$comissao[valorComissao]<sup style='font-size: 9px'><a id='linha$quantidade_obs' href='#ref$quantidade_obs'>$quantidade_obs</a></sup>";
+                    array_push($listaObservacoes, "<p id='ref$quantidade_obs'> <sup><a href='#linha$quantidade_obs'>$quantidade_obs</a></sup>$comissao[obsEdited] </p>");
+                }
               echo "<tr>
                       <td>$comissao[nomeServico]</td>
                       <td>$comissao[dataAgendamento]</td>
                       <td>$comissao[dataExecucao]</td>
                       <td>$comissao[numeroOS]</td>
                       <td>$comissao[numeroContrato]</td>
-                      <td>$comissao[valorComissao]</td>
+                      <td>$linhaComissao</td>
                       <td>$comissao[qtdPontoPrincipal]</td>
                       <td>$comissao[qtdPontoSecundario]</td>
                       <td>$comissao[numeroApto]</td>
                       <td>
-                          <button class='btn btn-default' type='button' onClick = ajustarValorComissao($comissao[numeroOS]) $desabilitar> 
+                          <button class='btn btn-default' type='button' onClick = 'ajustarValorComissao($comissao[numeroOS], $comissao[numeroContrato])' $desabilitar> 
                             <span class='glyphicon glyphicon-cog'></span>
                           </button>
                       </td>
@@ -99,8 +107,15 @@ error_reporting(0);
           ?>
         </tbody>
       </table>
+        <div class="observations">
+            <?php
+                foreach ($listaObservacoes as $observacoes) {
+                    echo $observacoes;
+                }
+            ?>
+        </div>
     </div>
-   
+
   </div>
 </body>
 
@@ -110,8 +125,10 @@ error_reporting(0);
         <div class="form-group">
           <label for="campoValorComissao">Valor da Comissão</label>
           <input type="number" min="0.00" step=any id="campoValorComissao" name="valor_comissao" placeholder="Insira a comissão" class="form-control">
+          <label for="editOSObservation">Digite o motivo da edição</label>
+          <input type="text" id="editOSObservation" class="form-control" name="obsEditOSValue">
         </div>
-      </form>  
+      </form>
     </div>
 
 <?php include "../classes/footer.php";?>

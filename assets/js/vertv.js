@@ -318,9 +318,10 @@ function alterarSenhaUsuario(id_usuario)
 }
 
 //## AJUSTE DE COMISSAO ###
-function ajustarValorComissao(ordemServico)
+function ajustarValorComissao(ordemServico, contrato)
 {
   var ordem = ordemServico;
+  var contrato = contrato;
   var modal = bootbox.dialog({
     message: $(".form-content").html(),
     title: "Ajustar Valor da Ordem ",
@@ -332,7 +333,7 @@ function ajustarValorComissao(ordemServico)
         {
           var form = modal.find(".form");
           var items = form.serialize();
-          $.post("../classes/ajustarValorComissao.php",{valor_comissao: items, os: ordem},function(msg_retorno){
+          $.post("../classes/ajustarValorComissao.php",{valor_comissao: items, os: ordem, contrato},function(msg_retorno){
               bootbox.alert({
                 title: "Ajuste de Comissão",
                 message: msg_retorno,

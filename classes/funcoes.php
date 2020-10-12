@@ -181,7 +181,9 @@ function getOsDetails($equipe, $dataInicial, $dataFinal, $tipo) {
         if (sizeOf($clienteFibra) >= 1) {
             $nomeServico = "$resultado[0]-FTTH";
         }
-
+        $isEdited = isOSEdited($numeroOS);
+        $valorComissaoInCplus = $valorComissao;
+        $editedObs = "";
         if ($tipo != "assistencia" and $tipo != "desconexao") {
             if (strpos($nomeServico,"CONEXAO PONTO ADICIONAL") !== FALSE) {
                 $dadosConexaoPontoAdicional = checkComissionInConexaoPontoAdicional($qtdPontoPrincipal, $qtdPontoSecundario, $clienteFibra, $valorComissao);
@@ -189,6 +191,11 @@ function getOsDetails($equipe, $dataInicial, $dataFinal, $tipo) {
                 $qtdPontoPrincipal = $dadosConexaoPontoAdicional['qtdPontoPrincipal'];
                 $qtdPontoSecundario = $dadosConexaoPontoAdicional['qtdPontoSecundario'];
                 $valorComissao = $dadosConexaoPontoAdicional['valorComissao'];
+
+                if ($isEdited) {
+                    $valorComissao = $valorComissaoInCplus;
+                    $editedObs = $isEdited;
+                }
             } elseif (strpos($nomeServico,"DESCONEXAO") !== FALSE ) {
                 $valorComissao = 25.00;
             } elseif (strpos($nomeServico,"TRANSFERENCIA") !== FALSE) {
@@ -197,34 +204,64 @@ function getOsDetails($equipe, $dataInicial, $dataFinal, $tipo) {
                 $qtdPontoPrincipal = $dadosConexaoPontoAdicional['qtdPontoPrincipal'];
                 $qtdPontoSecundario = $dadosConexaoPontoAdicional['qtdPontoSecundario'];
                 $valorComissao = $dadosConexaoPontoAdicional['valorComissao'];
+
+                if ($isEdited) {
+                    $valorComissao = $valorComissaoInCplus;
+                    $editedObs = $isEdited;
+                }
             } elseif (strpos($nomeServico,"RECONEXAO") !== FALSE ) {
                 $dadosConexaoPontoAdicional = checkComissionInTransferencia_Reconexao($qtdPontoPrincipal, $qtdPontoSecundario, $clienteFibra, $valorComissao, $numeroContrato);
 
                 $qtdPontoPrincipal = $dadosConexaoPontoAdicional['qtdPontoPrincipal'];
                 $qtdPontoSecundario = $dadosConexaoPontoAdicional['qtdPontoSecundario'];
                 $valorComissao = $dadosConexaoPontoAdicional['valorComissao'];
+
+                if ($isEdited) {
+                    $valorComissao = $valorComissaoInCplus;
+                    $editedObs = $isEdited;
+                }
             } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
                 $dadosConexaoPontoAdicional = checkComissionInDeCabeamento($qtdPontoPrincipal, $qtdPontoSecundario, $clienteFibra, $valorComissao, $numeroContrato, $observacao1, $observacao2);
 
                 $qtdPontoPrincipal = $dadosConexaoPontoAdicional['qtdPontoPrincipal'];
                 $qtdPontoSecundario = $dadosConexaoPontoAdicional['qtdPontoSecundario'];
                 $valorComissao = $dadosConexaoPontoAdicional['valorComissao'];
+
+                if ($isEdited) {
+                    $valorComissao = $valorComissaoInCplus;
+                    $editedObs = $isEdited;
+                }
             } elseif ($qtdPontoPrincipal > 1 and $qtdPontoSecundario >= 0) { //PRIMEIRA CONEXAO
                 $dadosConexaoPontoAdicional = checkComissionInPrimeiraConexaoComMultiploPontoPrincipal($qtdPontoPrincipal, $qtdPontoSecundario, $clienteFibra, $numeroContrato);
 
                 $qtdPontoPrincipal = $dadosConexaoPontoAdicional['qtdPontoPrincipal'];
                 $qtdPontoSecundario = $dadosConexaoPontoAdicional['qtdPontoSecundario'];
                 $valorComissao = $dadosConexaoPontoAdicional['valorComissao'];
+
+                if ($isEdited) {
+                    $valorComissao = $valorComissaoInCplus;
+                    $editedObs = $isEdited;
+                }
             } elseif ($qtdPontoPrincipal == 1 and sizeof($clienteFibra) >=1) {
                 $dadosConexaoPontoAdicional = checkComissionInPrimeiraConexaoComUnicoPontoPrincipalFTTH($qtdPontoSecundario, $numeroContrato);
 
                 $valorComissao = $dadosConexaoPontoAdicional['valorComissao'];
+
+                if ($isEdited) {
+                    $valorComissao = $valorComissaoInCplus;
+                    $editedObs = $isEdited;
+                }
             } elseif ($qtdPontoPrincipal == 0 and sizeOf($clienteFibra)>=1) { //se no Cplus vier zerado
                 $dadosConexaoPontoAdicional = checkComissionInPrimeiraConexaoComZeroPontoPrincipalFTTH($numeroContrato, $numeroOS);
 
                 $qtdPontoPrincipal = $dadosConexaoPontoAdicional['qtdPontoPrincipal'];
                 $qtdPontoSecundario = $dadosConexaoPontoAdicional['qtdPontoSecundario'];
                 $valorComissao = $dadosConexaoPontoAdicional['valorComissao'];
+
+                if ($isEdited) {
+                    $valorComissao = $valorComissaoInCplus;
+                    $editedObs = $isEdited;
+                }
             }
         }
         array_push($listaComissao, array(
@@ -238,12 +275,20 @@ function getOsDetails($equipe, $dataInicial, $dataFinal, $tipo) {
             "qtdPontoSecundario" => $qtdPontoSecundario,
             "numeroApto" => $numeroApto,
             "desativado" => $desativado,
+            "obsEdited" => $editedObs,
         ));
     }
 
     return $listaComissao;
 }
 
+/**
+ * @param $equipe
+ * @param $dataInicial
+ * @param $dataFinal
+ * @param $tipo
+ * @return string
+ */
 function OsComissionSQL($equipe, $dataInicial, $dataFinal, $tipo)
 {
     $sql_comissao = "SELECT c.nome, a.dtagen,a.DTEXEC, b.nome, a.os, a.contra, a.vlcom, a.NROPP, a.NROPA, d.apto, a.obser1, a.obser2
@@ -271,6 +316,13 @@ function OsComissionSQL($equipe, $dataInicial, $dataFinal, $tipo)
     return $sql_comissao;
 }
 
+/**
+ * @param $qtdPontoPrincipal
+ * @param $qtdPontoSecundario
+ * @param $clienteFibra
+ * @param $valorComissao
+ * @return array
+ */
 function checkComissionInConexaoPontoAdicional($qtdPontoPrincipal, $qtdPontoSecundario, $clienteFibra, $valorComissao)
 {
     if ($qtdPontoPrincipal > 1 and $qtdPontoSecundario >=0) {
@@ -306,6 +358,14 @@ function checkComissionInConexaoPontoAdicional($qtdPontoPrincipal, $qtdPontoSecu
     );
 }
 
+/**
+ * @param $qtdPontoPrincipal
+ * @param $qtdPontoSecundario
+ * @param $clienteFibra
+ * @param $valorComissao
+ * @param $contrato
+ * @return array
+ */
 function checkComissionInTransferencia_Reconexao($qtdPontoPrincipal, $qtdPontoSecundario, $clienteFibra, $valorComissao, $contrato)
 {
     if($qtdPontoPrincipal > 1 and $qtdPontoSecundario >= 0) {
@@ -352,6 +412,16 @@ function checkComissionInTransferencia_Reconexao($qtdPontoPrincipal, $qtdPontoSe
     );
 }
 
+/**
+ * @param $qtdPontoPrincipal
+ * @param $qtdPontoSecundario
+ * @param $clienteFibra
+ * @param $valorComissao
+ * @param $contrato
+ * @param $observacao1
+ * @param $observacao2
+ * @return array
+ */
 function checkComissionInDeCabeamento($qtdPontoPrincipal, $qtdPontoSecundario, $clienteFibra, $valorComissao, $contrato, $observacao1, $observacao2)
 {
     $quantidadePontoFTTH = verificaPontosFTTH($contrato);
@@ -410,6 +480,13 @@ function checkComissionInDeCabeamento($qtdPontoPrincipal, $qtdPontoSecundario, $
     );
 }
 
+/**
+ * @param $qtdPontoPrincipal
+ * @param $qtdPontoSecundario
+ * @param $clienteFibra
+ * @param $contrato
+ * @return array
+ */
 function checkComissionInPrimeiraConexaoComMultiploPontoPrincipal($qtdPontoPrincipal, $qtdPontoSecundario, $clienteFibra, $contrato)
 {
     $qtdPontoPrincipal = $qtdPontoPrincipal - 1;
@@ -442,6 +519,11 @@ function checkComissionInPrimeiraConexaoComMultiploPontoPrincipal($qtdPontoPrinc
 
 }
 
+/**
+ * @param $qtdPontoSecundario
+ * @param $contrato
+ * @return float[]
+ */
 function checkComissionInPrimeiraConexaoComUnicoPontoPrincipalFTTH($qtdPontoSecundario, $contrato)
 {
     $valorComissao = 80.00;
@@ -465,6 +547,11 @@ function checkComissionInPrimeiraConexaoComUnicoPontoPrincipalFTTH($qtdPontoSecu
 
 }
 
+/**
+ * @param $contrato
+ * @param $numeroOS
+ * @return array
+ */
 function checkComissionInPrimeiraConexaoComZeroPontoPrincipalFTTH($contrato, $numeroOS)
 {
     $pontosDoCliente = verificarPontos($contrato,$numeroOS);
@@ -498,6 +585,26 @@ function checkComissionInPrimeiraConexaoComZeroPontoPrincipalFTTH($contrato, $nu
     );
 
 
+}
+
+/**
+ * @param $ordemServico
+ * @return bool
+ */
+function isOSEdited($ordemServico)
+{
+    include "../config/db.php";
+
+    $sql_salvar_obs_os = "SELECT obs FROM os_comissao_detail WHERE numero_os=$ordemServico";
+
+    $result_query = mysqli_query($conectar, $sql_salvar_obs_os);
+
+    if (mysqli_affected_rows($conectar) > 0) {
+        $row = mysqli_fetch_assoc($result_query);
+        return $row['obs'];
+    }
+
+    return false;
 }
 
 //  $ok = verificaStatusOS();
