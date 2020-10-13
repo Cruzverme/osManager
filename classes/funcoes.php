@@ -115,7 +115,7 @@ function verificaPontosFTTH($contrato)
 
 function isMigration($frase)
 {
-    $lista = ["MIGRAR", "MIGRACAO", "MIGRAÇÃO"];
+    $lista = ["MIGRA","MIGRAR", "MIGRACAO", "MIGRAÇÃO"];
 
     foreach($lista as $palavra) {
         if (strpos($frase, $palavra) !== false) {
@@ -221,6 +221,9 @@ function getOsDetails($equipe, $dataInicial, $dataFinal, $tipo) {
                     $editedObs = $isEdited;
                 }
             } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
+                if($numeroOS === '708070') {
+                    $oi = 1;
+                }
                 $dadosConexaoPontoAdicional = checkComissionInDeCabeamento($qtdPontoPrincipal, $qtdPontoSecundario, $clienteFibra, $valorComissao, $numeroContrato, $observacao1, $observacao2);
 
                 $qtdPontoPrincipal = $dadosConexaoPontoAdicional['qtdPontoPrincipal'];
