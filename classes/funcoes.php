@@ -221,9 +221,6 @@ function getOsDetails($equipe, $dataInicial, $dataFinal, $tipo) {
                     $editedObs = $isEdited;
                 }
             } elseif (strpos($nomeServico,"DE CABEAMENTO") !== FALSE) {
-                if($numeroOS === '708070') {
-                    $oi = 1;
-                }
                 $dadosConexaoPontoAdicional = checkComissionInDeCabeamento($qtdPontoPrincipal, $qtdPontoSecundario, $clienteFibra, $valorComissao, $numeroContrato, $observacao1, $observacao2);
 
                 $qtdPontoPrincipal = $dadosConexaoPontoAdicional['qtdPontoPrincipal'];
