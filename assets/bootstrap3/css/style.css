@@ -21,3 +21,8 @@ body {
 .ajustado{
   padding-right: 12px;
 }
+
+.disabled {
+  pointer-events: none;
+  cursor: default;
+}

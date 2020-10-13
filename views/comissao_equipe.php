@@ -4,6 +4,11 @@
 
   $sql_equipes = "SELECT nome FROM equipes";
   $executa_equipes = mysqli_query($conectar,$sql_equipes);
+
+  $desabilitar = "";
+  if (!$permiteEditarOS AND $permissao != 99) {
+    $desabilitar = "disabled";
+  }
 ?>
 
 <body>
@@ -17,7 +22,7 @@
         </div>
       
         <div class="col-md-7">
-          <a href="gerenciarComissao.php" class="btn btn-primary pull-right h2">Ajustar Comissão</a>
+          <a href="gerenciarComissao.php" class="btn btn-primary pull-right h2 <?php echo $desabilitar?>">Ajustar Comissão</a>
         </div>
         
       </div>
