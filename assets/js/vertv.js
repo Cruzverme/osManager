@@ -41,6 +41,23 @@ $(document).ready(function() {
 		tabela.column(12).search(this.value).draw();
 		console.log(this.value)
 	});
+
+	$('#tabelaLog').DataTable({
+		language: {
+			search: 'Localizar',
+			emptyTable: 'Tabela Vazia',
+			lengthMenu: 'Mostrando _MENU_ itens',
+			info: 'Exibindo do item _START_ até _END_ de um total _TOTAL_ resultados',
+			infoFiltered: '(Filtrado de _MAX_ resultados)',
+			infoEmpty: 'Exibindo do item 0 até 0 de um total 0 resultados' ,
+			paginate:{
+				first: 'Primeiro',
+				last: 'Ultima',
+				next: 'Proximo',
+				previous: 'Anterior'
+			}
+		}
+	});
 });
 
 $(document).ready(function(){
@@ -361,6 +378,23 @@ function ajustarValorComissao(ordemServico, contrato)
   modal.modal("show");
 }
 
+//########## LOG COMISSAO ############
+function removeComissionLog(os)
+{
+	$.post("../classes/removeLogAction.php",{os},function(msg_retorno){
+		let retorno = JSON.parse(msg_retorno);
+
+		if (retorno["success"]) {
+			bootbox.alert({
+				title: "Remoção de LOG",
+				message: retorno["message"],
+				callback: function() {
+					$(`.${os}`).remove();
+				}
+			});
+		}
+	});
+}
 
 //#### EQUIPE TECNICA####
 
