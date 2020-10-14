@@ -20,7 +20,9 @@ echo "
         <li><a href=gerenciar_equipes.php>Gerencia de Equipe</a></li>
         <li><a href=comissao_equipe.php>Comissão de Equipes</a></li>";
         if($permissao == 99)
-          echo "<li><a href=gerenciar_usuarios.php>Gerenciar Usuários</a></li>";
+          echo "<li><a href=gerenciar_usuarios.php>Gerenciar Usuários</a></li>
+                <li><a href='log_comissao.php'>Log Alterações de Comissão</a></li>
+               ";
         else
           echo "<li><a href=gerenciar_usuarios.php>Gerenciar Usuário</a></li>";
 echo"
