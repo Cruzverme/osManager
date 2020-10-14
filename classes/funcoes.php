@@ -31,7 +31,7 @@ function verificaPacote($contrato,$dataI,$dataF,$equipe)
       INNER JOIN cplus.tva1700 ordemServ ON ordemServ.codequ = equipe.codequ AND 
       ordemServ.DTEXEC BETWEEN '$dataI' and '$dataF' 
       INNER JOIN cplus.tva1000 nomePonto ON (nomePonto.nome LIKE '%FIBRA%' OR nomePonto.nome LIKE '%IPTV%') AND nomePonto.codprog = pontos.codprog 
-      INNER JOIN cplus.tva2000 osBaixada ON osBaixada.codser = ordemServ.codser  AND osBaixada.codser NOT LIKE '3%' 
+      INNER JOIN cplus.tva2000 osBaixada ON osBaixada.codser = ordemServ.codser   
       WHERE pontos.codsit=27 AND pontos.contra=$contrato AND pontos.contra = ordemServ.contra 
       ORDER BY ordemServ.dtexec ASC";
 
@@ -376,28 +376,28 @@ function checkComissionInTransferencia_Reconexao($qtdPontoPrincipal, $qtdPontoSe
             $qtdPontoPrincipal = 1;
         }
 
-        $valorComissao = 65.86 + ($qtdPontoSecundario * 18.00);
+        $valorComissao = 65.00 + ($qtdPontoSecundario * 18.00);
 
         if (sizeOf($clienteFibra) >= 1) {
             $valorComissao = 80.00 + ($qtdPontoSecundario * 20.00);
         }
 
         if (apartType($contrato) == 'E') { //se for predio com backbone
-            $valorComissao = 38.24 + ($qtdPontoSecundario * 18.00);
+            $valorComissao = 38.00 + ($qtdPontoSecundario * 18.00);
 
             if (sizeOf($clienteFibra) >= 1) {
                 $valorComissao = 55.00 + ($qtdPontoSecundario * 20.00);
             }
         }
     } elseif ($qtdPontoPrincipal == 1 and $qtdPontoSecundario >=0) {
-        $valorComissao= 65.86 + ($qtdPontoSecundario * 18.00 );
+        $valorComissao= 65.00 + ($qtdPontoSecundario * 18.00 );
 
         if (sizeOf($clienteFibra) >= 1) {
             $valorComissao = 80.00 + ($qtdPontoSecundario * 20.00);
         }
 
         if (apartType($contrato) == 'E') { //se for predio com backbone
-            $valorComissao = 38.24 + ($qtdPontoSecundario * 18.00);
+            $valorComissao = 38.00 + ($qtdPontoSecundario * 18.00);
 
             if (sizeOf($clienteFibra) >= 1) {
                 $valorComissao = 55.00 + ($qtdPontoSecundario * 20.00);
@@ -496,14 +496,14 @@ function checkComissionInPrimeiraConexaoComMultiploPontoPrincipal($qtdPontoPrinc
         $qtdPontoPrincipal = 1;
     }
 
-    $valorComissao = 65.86 + ($qtdPontoSecundario * 18);
+    $valorComissao = 65.00 + ($qtdPontoSecundario * 18);
 
     if (sizeOf($clienteFibra) >= 1) {
         $valorComissao = 80.00 + ($qtdPontoSecundario * 20.00);
     }
 
     if (apartType($contrato) == 'E') { //se for predio com backbone
-        $valorComissao = 38.24 + ($qtdPontoSecundario * 18.00);
+        $valorComissao = 38.00 + ($qtdPontoSecundario * 18.00);
 
         if (sizeOf($clienteFibra) >= 1) {
             $valorComissao = 55.00 + ($qtdPontoSecundario * 20.00);
